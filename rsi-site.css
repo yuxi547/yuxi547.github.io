@@ -1,0 +1,20 @@
+.rsi-article{--sans:Poppins,Noto,sans-serif;--head:Kirana,Ding,Noto,sans-serif;--serif:Poppins,Noto,sans-serif;--body:#2a2e36;font-family:var(--sans);color:var(--body)}
+.rsi-article p{max-width:none;color:inherit;font-size:inherit;line-height:inherit}
+.rsi-article h1{white-space:normal;font-size:clamp(28px,3.6vw,48px);text-wrap:balance;max-width:none;font-weight:400;line-height:1.3}
+.rsi-article h2{font-weight:400}
+.rsi-article h3{line-height:1.6}
+.rsi-article .hero{padding-top:64px}
+.rsi-article .hero .col{align-items:center}
+.rsi-article .lede,.rsi-article .thesis,.rsi-article .steps .ask{font-style:normal}
+.rsi-article .rsi-toc{display:flex;flex-wrap:wrap;gap:8px 24px;max-width:1228px;margin:32px auto 0;padding:16px 24px;border-bottom:1px solid var(--rule)}
+.rsi-article .rsi-toc a{display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-size:14px}
+.rsi-article .links a{min-height:44px;display:inline-flex;align-items:center;line-height:1.5}
+.rsi-article .replay{display:block;width:100%;border:1px solid var(--rule);border-radius:16px;min-height:760px}
+.rsi-article .rounds{overflow-x:auto;justify-content:flex-start;max-width:100%}
+.rsi-article .eq .lines{overflow-x:auto}
+.rsi-article section[id],.rsi-article h3[id]{scroll-margin-top:calc(var(--header) + 24px)}
+.rsi-article .f1w{overflow-x:auto}
+.rsi-article .f1{min-width:900px}
+@media(max-width:900px){.rsi-article .hero{padding-top:40px}.rsi-article .hero .col{grid-template-columns:1fr;gap:32px}.rsi-article h1{text-align:left}.rsi-article .lede{font-size:20px}.rsi-article .col,.rsi-article .wide{padding-inline:24px}.rsi-article .eq .lines{font-size:15px}.rsi-article .replay{min-height:900px}}
+@media(max-width:480px){.rsi-article h1{font-size:28px;overflow-wrap:anywhere}.rsi-article .rsi-toc{gap:4px 20px}.rsi-article .rounds .test{margin-left:8px}.rsi-article .rounds div{flex-basis:48px}.rsi-article .facts{font-size:13px;gap:0 14px}.rsi-article .facts dt{font-size:12px}.rsi-article .eq>div{padding:20px 16px}}
+body[data-page=rsi] main>article.product-copy{max-width:none;width:100%}
