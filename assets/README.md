@@ -1,0 +1,1 @@
+Website images and fonts. Font licenses are included alongside the files.
