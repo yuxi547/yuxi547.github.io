@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="https://maoningge.github.io/hyperbrain-rsi-preview/sample/">
+<!-- Original episode player; responsive fixes maintained by Hyperplane website. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Episode replay sample</title>
+<style>
+@font-face{font-family:Kirana;src:url(../fonts/kirana-light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-300.woff2) format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-500.woff2) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-600.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:Newsreader;src:url(../fonts/newsreader-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+:root{
+  --paper:#fff; --card:#fff; --tint:#f7f7f7; --ink:#17191d; --body:#2a2e36; --note:#23406f; --mute:#70757f; --faint:#c4c4c4;
+  --rule:#e5e5e5; --chip:#f2f2f2; --accent:#1a67f7; --tool:#6a4bbf; --ok:#1f8a55; --bad:#c7392d;
+  --sans:Poppins,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --head:Kirana,Poppins,sans-serif;
+  --serif:Newsreader,Georgia,serif;
+  --mono:"SF Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:14.5px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1330px;margin:0 auto;padding:28px 24px 72px}
+.index{margin-bottom:34px;font:12px/1 var(--mono)}
+.index i{width:6px;height:6px;border-radius:50%}
+.index i.ok{background:var(--ok)}
+.index i.bad{background:var(--bad)}
+.groups{display:flex;flex-wrap:wrap;gap:0 24px;border-bottom:1px solid var(--rule)}
+.groups button{margin-bottom:-1px;padding:0 0 11px;border:0;border-bottom:2px solid transparent;background:none;font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);cursor:pointer}
+.groups button:hover{color:var(--ink)}
+.groups button.on{border-color:var(--accent);color:var(--ink)}
+.groups small{margin-left:6px;font-size:11px;font-weight:400;color:var(--faint)}
+.groups span{display:flex;align-items:center;gap:6px;margin-left:auto;padding-bottom:11px;font-size:11px;color:var(--mute)}
+.groups span i + i{margin-left:8px}
+.tasks{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px}
+.tasks a{display:flex;align-items:center;gap:6px;padding:7px 11px;border:1px solid var(--rule);border-radius:99px;color:var(--body);text-decoration:none}
+.tasks a[href]:hover{border-color:var(--mute)}
+.tasks a:not([href]){border-style:dashed;color:#a3a3a3}
+.tasks a.on{border-color:var(--accent);background:var(--card);color:var(--accent)}
+
+/* The article sizes the frame to the page, so the frame never scrolls. A scrollbar here would change the width, the height with it, and the two would chase each other. */
+.embed{overflow:hidden}
+.embed .wrap{max-width:none;padding:0 0 2px}
+.embed.bare .index{display:none}
+.head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px 48px;margin-bottom:26px}
+.head > div{flex:1 1 420px;min-width:0}
+.eyebrow{display:flex;align-items:center;gap:10px;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+.eyebrow i{font-style:normal;color:var(--accent)}
+h1{margin:14px 0 8px;font:300 36px/1.1 var(--head);letter-spacing:0}
+.instr{margin:0;font:italic 22px/1.35 var(--serif);color:#3c4048}
+.facts{display:flex;flex-wrap:wrap;gap:14px 30px;margin:0;padding:0 0 4px;list-style:none}
+.facts li{display:flex;flex-direction:column;gap:7px}
+.facts span{font:11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.facts b{font:500 17px/1 var(--sans)}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden;border:1px solid var(--rule);border-radius:14px;background:var(--card);box-shadow:0 24px 40px -30px rgba(40,40,40,.35)}
+.screen{position:relative;background:var(--chip);cursor:pointer}
+video{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.verdict{position:absolute;left:12px;top:12px;display:flex;gap:6px}
+.verdict a{display:flex;align-items:center;gap:6px;padding:6px 10px 6px 8px;border-radius:99px;background:rgba(255,255,255,.55);font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:#4a4e56}
+.verdict a::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.verdict a:hover{background:rgba(255,255,255,.8)}
+.verdict a.on{background:rgba(255,255,255,.94);color:var(--ok)}
+.verdict a.on.fail{color:var(--bad)}
+.cam{position:absolute;left:14px;bottom:12px;font:11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+
+#saw{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.seen{position:absolute;left:12px;right:12px;bottom:12px;padding:9px 11px 10px;border-radius:10px;background:rgba(255,255,255,.94);box-shadow:0 6px 18px -10px rgba(0,0,0,.5);cursor:default}
+.seen .tabs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;max-height:54px;overflow-y:auto}
+.seen .tabs span{margin-right:4px;font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.seen button{padding:5px 8px;border:1px solid var(--rule);border-radius:99px;background:var(--card);font:500 11.5px/1 var(--mono);color:var(--body);cursor:pointer}
+.seen button:hover{color:var(--ink);border-color:#c8c8c8}
+.seen button.on{border-color:var(--accent);color:var(--accent)}
+.seen p{margin:8px 0 0;font:12.5px/1.45 var(--mono);color:var(--body)}
+.seen p b{font-weight:600;color:var(--ink)}
+.seen p i{font-style:normal;color:var(--bad)}
+
+.side{position:relative;border-left:1px solid var(--rule)}
+.step{position:absolute;inset:0;display:none;flex-direction:column}
+.step.on{display:flex;animation:in .18s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.step header{padding:18px 22px 0;border-bottom:1px solid var(--rule)}
+.idx{display:flex;justify-content:space-between;gap:12px;font:11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.idx b{font-weight:600;color:var(--accent)}
+.note{margin:12px 0 0;font:500 14.5px/1.6 var(--sans);color:var(--note)}
+pre{flex:1;min-height:0;margin:0;padding:14px 20px 16px 0;overflow-y:auto;counter-reset:l;background:var(--tint);font:12.5px/1.65 var(--mono);color:var(--body);tab-size:4}
+pre::-webkit-scrollbar{width:10px}
+pre::-webkit-scrollbar-thumb{background:#d9d9d9;border-radius:5px;border:2px solid var(--tint)}
+.l{position:relative;display:block;min-height:1.65em;padding-left:4.3em;white-space:pre-wrap;word-break:break-all}
+.l::before{counter-increment:l;content:counter(l);position:absolute;left:0;width:3.2em;text-align:right;color:var(--faint);-webkit-user-select:none;user-select:none}
+.t{margin:0 -2px;padding:1px 2px;border-radius:3px;background:rgba(106,75,191,.1);color:var(--tool);font-weight:600}
+.uses{display:grid;gap:6px;margin:13px 0 0;padding:0;list-style:none}
+.uses li{display:flex;align-items:baseline;gap:10px;font-size:13px;line-height:1.4;color:var(--mute)}
+.uses code{flex:none;padding:3px 7px;border-radius:5px;background:rgba(106,75,191,.1);font:600 12px/1.2 var(--mono);color:var(--tool)}
+.view{display:flex;gap:22px;margin-top:15px}
+.view button{margin-bottom:-1px;padding:0 0 10px;border:0;border-bottom:2px solid transparent;background:none;font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);cursor:pointer}
+.view button:hover{color:var(--ink)}
+.view [data-view=prompt]{margin-left:auto}
+.side[data-view=code] .view [data-view=code],.side[data-view=why] .view [data-view=why],.side[data-view=prompt] .view [data-view=prompt]{border-color:var(--accent);color:var(--ink)}
+.side:not([data-view=code]) pre,.side:not([data-view=why]) .why,.side:not([data-view=prompt]) .prompt{display:none}
+.why,.prompt{flex:1;min-height:0;padding:16px 26px 20px 22px;overflow-y:auto;background:var(--tint);font-size:14px;line-height:1.65;color:var(--body)}
+.why::-webkit-scrollbar,.prompt::-webkit-scrollbar{width:10px}
+.why::-webkit-scrollbar-thumb,.prompt::-webkit-scrollbar-thumb{background:#d9d9d9;border-radius:5px;border:2px solid var(--tint)}
+.why p{margin:0 0 12px;max-width:62ch}
+.why code,.prompt code{font:12.5px/1 var(--mono);color:var(--ink)}
+.why small,.prompt small{display:block;margin-bottom:12px;font:11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.prompt{font-size:13.5px;line-height:1.6}
+.prompt small{margin-bottom:6px}
+.prompt details{border-bottom:1px solid var(--rule)}
+.prompt details[open]{padding-bottom:8px}
+.prompt summary{display:flex;align-items:baseline;gap:10px;padding:11px 0;font:600 12.5px/1.2 var(--mono);color:var(--ink);cursor:pointer;list-style:none}
+.prompt summary::-webkit-details-marker{display:none}
+.prompt summary::before{content:"+";width:9px;color:var(--accent)}
+.prompt details[open] > summary::before{content:"−"}
+.prompt summary span{margin-left:auto;font-size:11px;font-weight:400;color:var(--mute)}
+.prompt summary span.own{color:var(--accent)}
+.prompt h4{margin:10px 0 8px;font:600 15px/1.3 var(--mono)}
+.prompt h5{margin:16px 0 8px;font:600 11px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.prompt h6{margin:14px 0 6px;font:600 13px/1.4 var(--mono);color:var(--note)}
+.prompt p{margin:0 0 10px}
+.prompt ul{margin:0 0 12px;padding-left:18px}
+.prompt li{margin-bottom:6px}
+.prompt .pc{margin:0 0 12px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--card);font:12px/1.6 var(--mono);white-space:pre-wrap;word-break:break-word}
+.prompt table{margin:0 0 12px;border-collapse:collapse;font-size:13px}
+.prompt th,.prompt td{padding:6px 14px 6px 0;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+.prompt th{font:600 11px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.n{padding:0 3px;border-radius:3px;background:var(--chip);color:var(--mute);cursor:pointer}
+.n:hover{color:var(--ink)}
+.n.open{padding:0;background:none}
+.k{color:#5a6c94}.s{color:#4d7a48}.c{color:#999;font-style:italic}.r{color:var(--accent);font-weight:600}
+
+.deck{position:relative;grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--rule)}
+.deck button{height:34px;padding:0;border:1px solid var(--rule);border-radius:8px;background:transparent;color:var(--ink);font:600 12px/1 var(--mono);cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#play{flex:none;width:34px;display:grid;place-items:center;border-color:var(--accent);background:var(--accent);color:#fff}
+#play svg{width:12px;height:12px;fill:currentColor}
+#rate{flex:none;width:54px}
+#rate:hover{border-color:var(--mute)}
+#clock{flex:none;min-width:96px;text-align:right;font:12px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--mute)}
+.track{flex:1;min-width:0;display:flex;gap:3px}
+.deck .seg{position:relative;flex:1 1 30px;min-width:30px;overflow:hidden;border-color:transparent;border-radius:6px;background:var(--chip);color:var(--mute)}
+.seg u{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(26,103,247,.16);pointer-events:none}
+.seg span{position:relative}
+.deck .seg:hover{background:#e6e6e6;color:var(--ink)}
+.deck .seg.done{color:var(--accent)}
+.deck .seg.on{border-color:var(--accent);background:var(--card);color:var(--accent)}
+.seg.on u{background:rgba(26,103,247,.22)}
+.deck .seg.still{flex:0 0 30px}
+.seg.tool::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--tool);opacity:.75}
+.track.dense{gap:2px}
+.track.dense .seg{flex-basis:10px;min-width:10px;border-radius:4px;font-size:10.5px;font-weight:500}
+.track.dense .seg.still{flex:0 0 10px}
+.seg.tiny span{display:none}
+.tip{position:absolute;bottom:calc(100% - 4px);z-index:2;max-width:min(430px,calc(100% - 16px));padding:9px 12px 10px;border:1px solid var(--rule);border-radius:9px;background:var(--card);box-shadow:0 10px 24px -12px rgba(40,40,40,.45);font-size:13px;line-height:1.4;color:var(--body);pointer-events:none}
+.tip b{display:block;margin-bottom:4px;font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.tip b i{font-style:normal;font-weight:400;color:var(--mute)}
+.deck .seg.tail{flex:1 1 0;min-width:0;cursor:default;background:repeating-linear-gradient(135deg,var(--chip) 0 4px,transparent 4px 8px)}
+
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;margin:14px 2px 0;font-size:13px;color:var(--mute)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:0 2px;padding-top:14px;font-size:13px;color:var(--mute)}
+.legend code{margin-right:6px;font:600 12px/1 var(--mono)}
+kbd{padding:1px 5px;border:1px solid var(--rule);border-radius:4px;background:var(--card);font:11px/1.4 var(--mono);color:var(--ink)}
+
+@media (max-width:860px){
+  .wrap{padding:28px 14px 48px}
+  h1{font-size:26px}
+  .instr{font-size:19px}
+  .stage{grid-template-columns:1fr}
+  .deck{order:2;flex-wrap:wrap}
+  .track{order:-1;flex-basis:100%}
+  #clock{margin-left:auto}
+  .side{order:3;height:54vh;border-left:0;border-top:1px solid var(--rule)}
+  .keys{display:none}
+}
+
+/* Wrapping category rows keep their underline within each row. */
+.groups{row-gap:12px;align-items:baseline;padding-bottom:4px}
+.groups button{margin-bottom:0;line-height:1.4}
+.groups span{line-height:1.4}
+@media(max-width:860px){
+ .groups{column-gap:18px;row-gap:12px}
+ .groups button{padding-bottom:8px}
+ .side{height:auto;min-height:0}
+ .step{position:relative;inset:auto}
+ .step pre{flex:none;max-height:360px;overflow:auto}
+ .step .why,.step .prompt{flex:none;max-height:480px;overflow:auto}
+}
+
+</style>
+<script src="episodes/index.js"></script>
+<script>
+// ?ep=<task>/ep<layout>; without it, build_tower (or the first task that has an episode).
+const GROUPS = window.TASKS, ALL = GROUPS.flatMap(g => g.tasks), has = t => (t.success ?? t.fail) != null, first = ALL.find(t => t.task === 'build_tower' && has(t)) || ALL.find(has);
+// ?embed: shown inside the article (no page margins; =bare also hides the task index), links keep it. ?play: start playing.
+const QS = new URLSearchParams(location.search), KEEP = QS.has('embed') ? `&embed=${QS.get('embed')}` : '';
+if (KEEP) document.documentElement.className = 'embed ' + QS.get('embed');
+const q = QS.get('ep'), EP = /^\w+\/ep\d+$/.test(q || '') ? q : `${first.task}/ep${first.success ?? first.fail}`;
+document.write(`<script src="episodes/${EP.split('/')[0]}/prompt.js"><\/script><script src="episodes/${EP}.js"><\/script>`);
+</script>
+</head>
+<body>
+<div class="wrap">
+  <nav class="index" id="index"></nav>
+  <header class="head">
+    <div>
+      <div class="eyebrow">Episode replay <i id="cat"></i></div>
+      <h1 id="task"></h1>
+      <p class="instr" id="instr"></p>
+    </div>
+    <ul class="facts" id="facts"></ul>
+  </header>
+
+  <section class="stage">
+    <div class="screen" id="screen">
+      <video id="v" muted playsinline preload="auto"></video>
+      <img id="saw" alt="" hidden>
+      <div class="verdict" id="verdict"></div>
+      <span class="cam" id="cam">Head camera</span>
+      <div class="seen" id="seen" hidden></div>
+    </div>
+    <div class="side" id="steps" data-view="code"></div>
+    <div class="deck">
+      <button id="play" aria-label="Play / pause"></button>
+      <div class="track" id="track"></div>
+      <button id="rate" aria-label="Playback speed"></button>
+      <span id="clock"></span>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+  </section>
+
+  <div class="legend" id="legend"></div>
+  <div class="foot">
+    <span>Code reformatted, prints removed, image paths shortened. Reasoning and prompt unedited. Step summaries added afterwards.</span>
+    <span class="keys"><kbd>Space</kbd> play / pause &nbsp; <kbd>←</kbd> <kbd>→</kbd> step</span>
+  </div>
+</div>
+<script>
+const ep = window.EPISODE, $ = id => document.getElementById(id), v = $('v');
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const KW = new Set('def return if else elif for in while import from as not and or None True False lambda try except with pass break continue'.split(' '));
+function hl(line){
+  return line.replace(/(#.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\[-?[\d.]+(?:, -?[\d.]+)+\]|(?<![\w.])-?\d+\.\d\d+)|(\brobo\.\w+)|(\b[A-Za-z_]\w*\b)|([&<>])/g,
+    (m,c,s,v,r,w,x) => v ? (v.includes('.') ? `<span class="n" data-v="${v}" title="Show the number${v[0] === '[' ? 's' : ''}">${v[0] === '[' ? '[…]' : '…'}</span>` : v) : c ? `<span class="c">${esc(c)}</span>` : s ? `<span class="s">${esc(s)}</span>` :
+      r ? `<span class="r">${r}</span>` : w ? (KW.has(w) ? `<span class="k">${w}</span>` : TOOLS[w] ? `<span class="t">${w}</span>` : w) : esc(x));
+}
+const TOOLS = ep.tools || {};
+const total = ep.total / ep.fps, n = ep.steps.length;
+// Task index: one tab per leaderboard category, one chip per task; a dot for each episode that is there.
+const here = ALL.find(t => t.task === ep.task), tab = GROUPS.findIndex(g => g.tasks.includes(here));
+function index(){
+  $('index').innerHTML = `<div class="groups">${GROUPS.map((g, i) => `<button data-g="${i}"${i === tab ? ' class="on"' : ''}>${g.group}<small>${g.tasks.length}</small></button>`).join('')}` +
+    '<span><i class="ok"></i>success<i class="bad"></i>failure</span></div>' +
+    `<div class="tasks">${GROUPS[tab].tasks.map(t => { const l = t.success ?? t.fail;
+      return `<a${l == null ? '' : ` href="?ep=${t.task}/ep${l}${KEEP}"`}${t === here ? ' class="on"' : ''}>${t.task.replace(/_random$/, '')}${t.success != null ? '<i class="ok"></i>' : ''}${t.fail != null ? '<i class="bad"></i>' : ''}</a>`; }).join('')}</div>`;
+}
+// A category tab opens that category's first episode, so the tab and the episode below it always agree.
+$('index').onclick = e => { const b = e.target.closest('button'), t = b && +b.dataset.g !== tab && GROUPS[+b.dataset.g].tasks.find(has);
+  if (t) leave(b, `?ep=${t.task}/ep${t.success ?? t.fail}${KEEP}`); };
+// Changing episode: fetch the next one's data before leaving, so this one stays on screen until the next can be drawn whole.
+function leave(el, search){
+  el.parentNode.querySelector('.on')?.classList.remove('on'); el.classList.add('on');
+  const q = new URLSearchParams(search).get('ep');
+  Promise.all([`episodes/${q.split('/')[0]}/prompt.js`, `episodes/${q}.js`].map(u => fetch(u).then(r => r.blob())))
+    .catch(() => {}).then(() => location.search = search);
+}
+addEventListener('click', e => { const a = e.target.closest('a[href^="?ep="]'); if (a) { e.preventDefault(); leave(a, a.getAttribute('href')); } }, true);
+index();
+$('legend').innerHTML = '<span><code class="r">robo.*</code>robot primitives</span>' +
+  '<span><code class="n">[…]</code>numbers, click to show</span>' +
+  (Object.keys(TOOLS).length ? '<span><code class="t">task tool</code>from the task tool library</span>' : '');
+const sec = t => t.toFixed(1), pad = i => String(i).padStart(2, '0');
+
+$('task').textContent = ep.task;
+$('cat').textContent = ep.category ? '/ ' + ep.category : '';
+$('instr').textContent = '“' + ep.instruction + '”';
+// The task's two episodes, one success and one failure where both exist; the one on screen is lit.
+$('verdict').innerHTML = [['success', 'Success'], ['fail', 'Fail']].filter(k => here[k[0]] != null)
+  .map(k => `<a href="?ep=${ep.task}/ep${here[k[0]]}${KEEP}" class="${k[0]}${ep.success === (k[0] === 'success') ? ' on' : ''}">${k[1]}</a>`).join('');
+$('verdict').onclick = e => e.stopPropagation();
+$('facts').innerHTML = [['Seed', ep.seed], ['Layout', ep.layout], ['LLM calls', ep.turns], ['Sim steps', ep.total], ['Length', sec(total) + ' s']]
+  .filter(f => f[1] !== undefined).map(f => `<li><span>${f[0]}</span><b>${f[1]}</b></li>`).join('');
+
+const track = $('track'), tip = $('tip');
+track.classList.toggle('dense', n > 14);
+function hint(i, seg, when){
+  tip.innerHTML = `<b>Step ${pad(i + 1)} <i>· ${when}</i></b>${esc(ep.steps[i].note || '')}`; tip.hidden = false;
+  const d = tip.parentNode.getBoundingClientRect(), r = seg.getBoundingClientRect();
+  tip.style.left = Math.max(8, Math.min(d.width - tip.offsetWidth - 8, r.left + r.width / 2 - d.left - tip.offsetWidth / 2)) + 'px';
+}
+const steps = ep.steps.map((s, i) => {
+  const t0 = s.s0 / ep.fps, t1 = s.s1 / ep.fps, lines = s.code.replace(/\s+$/, '').split('\n');
+  const when = s.s1 > s.s0 ? `${sec(t0)}–${sec(t1)} s · ${s.s1 - s.s0} sim steps` : 'no robot motion';
+  const el = document.createElement('article'); el.className = 'step';
+  el.innerHTML = `<header><div class="idx"><b>Step ${pad(i + 1)} / ${pad(n)}</b><span>${when}</span></div>` +
+    `<p class="note">${esc(s.note || '')}</p>` +
+    ((s.tools || []).length ? `<ul class="uses">${s.tools.map(t => `<li><code>${t}</code><span>${esc(TOOLS[t].doc)}</span></li>`).join('')}</ul>` : '') +
+    '<div class="view"><button data-view="code">Code</button><button data-view="why">Reasoning</button><button data-view="prompt">Prompt</button></div>' +
+    `</header><pre>${lines.map(l => `<span class="l">${hl(l)}</span>`).join('')}</pre>` +
+    `<div class="why"><small>The model's thinking before this code · API summary</small>${(s.why || 'No thinking summary was recorded for this step.').split(/\n\s*\n/).map(x => `<p>${esc(x).replace(/`([^`]+)`/g, '<code>$1</code>')}</p>`).join('')}</div>`;
+  $('steps').appendChild(el);
+  const seg = document.createElement('button');
+  seg.className = 'seg' + (s.s1 > s.s0 ? '' : ' still') + ((s.tools || []).length ? ' tool' : '');
+  seg.onmouseenter = seg.onfocus = () => hint(i, seg, when); seg.onmouseleave = seg.onblur = () => tip.hidden = true;
+  seg.style.flexGrow = s.s1 - s.s0; seg.innerHTML = `<u></u><span>${i + 1}</span>`; seg.onclick = () => go(i);
+  track.appendChild(seg);
+  return {t0, t1, el, seg, fill: seg.firstChild, pre: el.querySelector('pre'), why: el.querySelector('.why')};
+});
+// Frames after the last logged call (the environment ended the episode there).
+const tEnd = steps[n - 1].t1; let tail = null;
+if (ep.total / ep.fps > tEnd){
+  const seg = document.createElement('div'); seg.className = 'seg tail'; seg.title = 'episode end';
+  seg.style.flexGrow = ep.total - ep.steps[n - 1].s1; seg.innerHTML = '<u></u>'; track.appendChild(seg); tail = seg.firstChild;
+}
+
+// Coordinate lists are folded; a click shows the numbers the agent wrote.
+// The system prompt (Markdown), one foldable section per top-level heading; the task's own sections are marked, Task notes starts open.
+const inl = x => esc(x).replace(/`([^`]+)`/g, '<code>$1</code>');
+function md(src){
+  let out = '', list = false, code = null, rows = null;
+  const close = () => {
+    if (list) out += '</ul>';
+    if (rows) out += `<table>${rows.map((r, i) => `<tr>${r.map(c => i ? `<td>${inl(c)}</td>` : `<th>${inl(c)}</th>`).join('')}</tr>`).join('')}</table>`;
+    list = false; rows = null;
+  };
+  for (const l of src.split('\n')){
+    if (l.startsWith('```')) { if (code) { out += `<div class="pc">${esc(code.join('\n'))}</div>`; code = null; } else { close(); code = []; } continue; }
+    if (code) { code.push(l); continue; }
+    const h = l.match(/^(#{2,4}) (.*)/);
+    if (l.startsWith('- ')) { if (!list) { close(); out += '<ul>'; list = true; } out += `<li>${inl(l.slice(2))}</li>`; }
+    else if (l.startsWith('|')) { if (!rows) { close(); rows = []; } if (!/^[-| ]+$/.test(l)) rows.push(l.slice(1, -1).split('|').map(c => c.trim())); }
+    else { close(); if (h) out += `<h${h[1].length + 2}>${inl(h[2])}</h${h[1].length + 2}>`; else if (l.trim()) out += `<p>${inl(l)}</p>`; }
+  }
+  close(); return out;
+}
+const PROMPT = window.PROMPT || '', secs = []; let fenced = false;
+for (const l of PROMPT.split('\n')){
+  if (l.startsWith('```')) fenced = !fenced;
+  if (!fenced && l.startsWith('# ')) secs.push({title: l.slice(2), body: []}); else if (secs.length) secs[secs.length - 1].body.push(l);
+}
+// One element for the whole episode: it moves into the step on screen and keeps its scroll position (py; -1 until first shown, then Task notes).
+const sys = document.createElement('div'); let py = -1; sys.className = 'prompt'; sys.onscroll = () => py = sys.scrollTop;
+function place(){
+  if ($('steps').dataset.view !== 'prompt' || !sys.offsetParent) return;
+  if (py < 0) { const d = sys.querySelector('details[open]'); py = d ? d.offsetTop - sys.offsetTop : 0; }
+  sys.scrollTop = py;
+}
+sys.innerHTML = `<small>System prompt for this task · ${Math.round(PROMPT.length / 1000)} KB · unedited</small>` +
+  secs.map(x => { const own = x.title.startsWith('Task ');
+    return `<details${x.title === 'Task notes' ? ' open' : ''}><summary>${esc(x.title)}<span${own ? ' class="own"' : ''}>${own ? 'this task' : 'every task'}</span></summary>${md(x.body.join('\n'))}</details>`; }).join('');
+// Code, reasoning or prompt: the choice holds across steps.
+$('steps').onclick = e => {
+  const b = e.target.closest('.view button'); if (b) { $('steps').dataset.view = b.dataset.view; place(); return; }
+  const c = e.target.closest('.n'); if (!c) return;
+  c.textContent = c.classList.toggle('open') ? c.dataset.v : c.dataset.v[0] === '[' ? '[…]' : '…';
+};
+// What the agent saw: the SAM 3 overlays of the active step's locate calls. look = the one on screen (-1: the video).
+const saw = $('saw'), seen = $('seen'), num = x => x.toFixed(2).replace('-', '−'); let look = -1;
+const WHY = {needs_second_view: 'seen by the head camera only, so its height is unknown: a wrist camera has to see it too', not_found: 'no match within 40 px of the pixel the agent pointed at', ambiguous: 'the pixel the agent pointed at lies between two candidates'};
+function readout(o){
+  const head = `<b>locate("${esc(o.text)}")</b> · ${o.found} found`;
+  if (!o.xyz) return `${head} · <i>${WHY[o.err] || o.err}</i>`;
+  const from = o.height === 'given' ? 'head camera, height given' : (o.height || '').startsWith('sibling') ? 'head camera, height from a matching piece' : o.views.join(' + ') + ' cameras';
+  return `${head} · no. ${o.chosen} at (${o.xyz.map(num).join(', ')}) m · ${o.size.map(x => (x * 100).toFixed(1)).join(' × ')} cm · ${from}`;
+}
+function show(k){
+  const ss = ep.steps[active].sees || [], o = ss[look = k];
+  seen.hidden = !ss.length; $('cam').hidden = !!ss.length; saw.hidden = !o; if (o) saw.src = o.img;
+  // One chip per name; a name located several times steps through them on each click (3/12), then goes back to the video.
+  const names = [...new Set(ss.map(x => x.text))].map(text => ({text, at: ss.flatMap((x, j) => x.text === text ? [j] : [])}));
+  seen.innerHTML = `<div class="tabs"><span>SAM 3 · what the agent saw</span>${names.map(g => { const p = g.at.indexOf(k), m = g.at.length;
+    return `<button data-k="${p < 0 ? g.at[0] : g.at[p + 1] ?? -1}"${p < 0 ? '' : ' class="on"'}>${esc(g.text)}${m > 1 ? (p < 0 ? ' × ' + m : ` · ${p + 1}/${m}`) : ''}</button>`; }).join('')}</div>` + (o ? `<p>${readout(o)}</p>` : '');
+}
+seen.onclick = e => {
+  e.stopPropagation(); const b = e.target.closest('button'); if (!b) return;
+  v.pause(); force = active; show(+b.dataset.k);
+};
+// Playback stops for HOLD ms on each step with no motion, so what it looked at gets seen.
+// hold: the step being shown that way; cursor: the last step playback has passed.
+const HOLD = 1000; let hold = null, cursor = 0, resuming = false, restart = false;
+const ICON = {play:'<svg viewBox="0 0 16 16"><path d="M3.5 1.5v13l10.5-6.5z"/></svg>', pause:'<svg viewBox="0 0 16 16"><path d="M3 2h3.6v12H3zM9.4 2H13v12H9.4z"/></svg>'};
+const RATES = [0.25, 0.5, 1]; let rate = 2;
+function setRate(){ v.defaultPlaybackRate = v.playbackRate = RATES[rate]; $('rate').textContent = RATES[rate] + '×'; }
+v.poster = ep.poster; v.src = ep.video; setRate();
+$('rate').onclick = () => { rate = (rate + 1) % RATES.length; setRate(); };
+const toggle = () => { if (hold) { force = hold.i; hold = null; icon(); } else v.paused ? v.play() : v.pause(); };
+$('play').onclick = $('screen').onclick = toggle;
+const icon = () => $('play').innerHTML = v.paused && !hold ? ICON.play : ICON.pause;
+v.addEventListener('play', () => { if (!resuming) cursor = restart ? -1 : active; resuming = restart = false; force = -1; icon(); if (look >= 0) show(-1); });
+v.addEventListener('ended', () => restart = true); v.addEventListener('pause', icon); icon();
+
+// force: the step picked by hand while paused (needed for steps with no motion, which have no time span)
+let force = 0, active = -1;
+function resume(){ resuming = true; v.play(); }
+function go(i){
+  i = Math.max(0, Math.min(n - 1, i)); const s = steps[i], still = s.t1 === s.t0, playing = !v.paused || !!hold;
+  hold = null; cursor = i;
+  if (still) v.pause();
+  force = still || !playing ? i : -1; v.currentTime = s.t0 + 0.001;
+  if (playing && !still && v.paused) resume();
+}
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON' && e.key === ' ') return;
+  if (e.key === ' ') { e.preventDefault(); toggle(); }
+  else if (e.key === 'ArrowRight') go(active + 1);
+  else if (e.key === 'ArrowLeft') go(active - 1);
+});
+const clamp = x => Math.max(0, Math.min(1, x));
+function frame(){
+  const t = v.currentTime, now = performance.now(), over = hold && now >= hold.until;
+  if (over) { cursor = hold.i; hold = null; }
+  if (!hold && (over || !v.paused)){
+    const j = steps.findIndex((s, i) => i > cursor && s.t1 === s.t0 && s.t0 <= t);
+    if (j >= 0) { hold = {i: j, until: now + HOLD}; v.pause(); } else if (over) resume();
+  }
+  let a = 0; steps.forEach((s, i) => { if (s.t1 > s.t0 && s.t0 <= t) a = i; });
+  if (force >= 0 && v.paused) a = force;
+  if (hold) a = hold.i;
+  if (a !== active){
+    active = a; steps[a].pre.scrollTop = steps[a].why.scrollTop = 0;
+    const y = py; steps[a].el.appendChild(sys); py = y;
+    steps.forEach((s, i) => { s.el.classList.toggle('on', i === a); s.seg.classList.toggle('on', i === a); });
+    place();
+    show(steps[a].t1 === steps[a].t0 && (ep.steps[a].sees || []).length ? 0 : -1);
+  }
+  steps.forEach((s, i) => {
+    const p = s.t1 > s.t0 ? clamp((t - s.t0) / (s.t1 - s.t0)) : +(i <= a);
+    s.fill.style.width = p * 100 + '%'; s.seg.classList.toggle('done', p >= 1 && i !== a);
+  });
+  if (tail) tail.style.width = clamp((t - tEnd) / (total - tEnd)) * 100 + '%';
+  $('clock').textContent = sec(t) + ' / ' + sec(total) + ' s';
+  requestAnimationFrame(frame);
+}
+frame();
+const fit = () => steps.forEach(s => s.seg.classList.toggle('tiny', s.seg.offsetWidth < 19));
+fit(); addEventListener('resize', fit);
+const view = location.hash.match(/view=(reasoning|prompt)/); if (view) { $('steps').dataset.view = view[1] === 'prompt' ? 'prompt' : 'why'; place(); }
+const m = location.hash.match(/step=(\d+)/);
+if (m) v.addEventListener('loadedmetadata', () => go(m[1] - 1), {once:true});
+if (QS.has('loop')) v.loop = true;
+if (QS.has('play')) v.play().catch(() => {});
+// The article sizes the frame from this.
+if (KEEP && parent !== window) {
+ const wrap = document.querySelector('.wrap');
+ const reportHeight = () => parent.postMessage({replay: EP, height: Math.ceil(wrap.getBoundingClientRect().height)}, '*');
+ new ResizeObserver(reportHeight).observe(wrap);
+ addEventListener('load', reportHeight);
+ reportHeight();
+}
+</script>
+</body>
+</html>
