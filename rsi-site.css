@@ -50,3 +50,12 @@ html[lang=en] .rsi-article p{text-align:left;text-align-last:auto;hyphens:none}
 
 /* Original report replay: no outer rounded clipping or forced minimum height. */
 .rsi-article .replay{border:0;border-radius:0;min-height:0;height:1100px}
+
+/* Phone introduction: keep text and facts, without the landscape illustration. */
+@media(max-width:600px){
+ .rsi-article .hero .plane{display:none}
+ .rsi-article .hero{padding-bottom:8px}
+ .rsi-article .hero .col{gap:24px}
+ .rsi-article .hero .facts{margin-bottom:0}
+ .rsi-article .rsi-toc{margin-top:24px}
+}
