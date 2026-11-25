@@ -477,3 +477,46 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
 .news-about h2{margin-top:0}
 @media(max-width:480px){.news-story{padding-block:28px}}
 @media(hover:hover){.text-link:hover{color:#1255d6}}
+
+/* Article reading rhythm and stable TOC indices. */
+.editorial>aside a{display:grid;grid-template-columns:2ch minmax(0,1fr);align-items:start;column-gap:12px}
+.editorial>aside .toc-index{white-space:nowrap;font-variant-numeric:tabular-nums}
+.editorial>aside a>span:last-child{min-width:0;overflow-wrap:normal}
+.news-body figcaption{display:grid;gap:4px;text-align:center;font-size:14px;line-height:1.7;color:var(--muted);margin-top:12px}
+.news-body p,.product-copy p,.box-release-article p{ text-align:justify;text-align-last:start;hyphens:auto;overflow-wrap:break-word }
+.news-body .news-chapter-number,.news-body .news-report-label,.news-body .news-report-link{text-align:start}
+/* The same copy-first product sequence on tablets and phones. */
+@media(max-width:850px){
+ .rsi-stage{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:48px 6% 48px;gap:28px}
+ .rsi-stage .stage-copy{order:0;max-width:100%;margin:0}
+ .rsi-stage .rsi-landscape{position:relative;inset:auto;z-index:0;order:1;width:100%;height:auto;margin:0;flex:none}
+ .rsi-stage .rsi-landscape img{mask-image:none;-webkit-mask-image:none;display:block;width:100%;max-width:100%;height:auto;margin:0;object-fit:contain;object-position:center}
+ .rsi-stage .rsi-landscape:after{display:none}
+ .rsi-stage h2.stage-product-name{font-size:clamp(32px,6vw,56px)}
+ .product-stage .stage-copy>h2:not(.stage-product-name),.product-stage .stage-copy>h3{max-width:none;text-wrap:pretty}
+}
+@media(max-width:480px){
+ .rsi-stage{padding:32px 24px 48px;gap:24px}
+ .rsi-stage h2.stage-product-name{font-size:clamp(29px,7.6vw,36px)}
+ .product-stage .stage-copy>h2:not(.stage-product-name),.product-stage .stage-copy>h3{font-size:clamp(20px,5.2vw,23px);max-width:none}
+ .news-article>h1{font-size:clamp(23px,5.9vw,28px);line-height:1.4;text-wrap:pretty}
+ html[lang=en] .news-article>h1{font-size:clamp(22px,5.6vw,26px);line-height:1.35;letter-spacing:-.02em}
+ .news-body h2,.product-copy h2{font-size:clamp(22px,5.6vw,26px);line-height:1.45;text-wrap:pretty}
+ html[lang=en] .news-body h2,html[lang=en] .product-copy h2{font-size:23px;line-height:1.4}
+ .news-body h3,.product-copy h3{font-size:21px;line-height:1.45;text-wrap:pretty}
+}
+/* Product metrics: aligned labels, values, units and explanatory notes. */
+.box-release-article .stats{gap:24px;padding:24px;margin:32px 0}
+.box-release-article .stats>div{display:flex;flex-direction:column;gap:8px}
+.box-release-article .stats span{font-size:13px;line-height:1.6;min-height:3.2em}
+.box-release-article .stats strong{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:32px;line-height:1.2}
+.box-release-article .stats strong small{display:inline;font-size:13px;margin:0;line-height:1.4}
+.box-release-article .stats>div>small{font-size:12px;line-height:1.6}
+@media(max-width:600px){
+ .box-release-article .stats{grid-template-columns:minmax(0,1fr);gap:0;padding:8px 20px}
+ .box-release-article .stats>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:16px 0;align-items:center}
+ .box-release-article .stats>div+div{border-top:1px solid var(--line)}
+ .box-release-article .stats span{min-height:0;font-size:13px}
+ .box-release-article .stats strong{font-size:30px;grid-column:2;grid-row:1 / span 2;justify-content:flex-end}
+ .box-release-article .stats>div>small{grid-column:1;font-size:12px}
+}

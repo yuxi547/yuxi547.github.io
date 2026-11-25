@@ -42,3 +42,6 @@ body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(24px,3vw,42px)!importa
  .rsi-article .eq pre small{font-size:11px}
  .rsi-article .steps{row-gap:8px}
 }
+
+.rsi-article p{text-align:justify;text-align-last:start;hyphens:auto;overflow-wrap:break-word}.rsi-article figcaption,.rsi-article .cap{text-align:center;text-align-last:center}.rsi-article .lab,.rsi-article .eyebrow{text-align:start}
+@media(max-width:480px){.rsi-article h2{font-size:24px;line-height:1.4;text-wrap:pretty}.rsi-article h3{font-size:16px;line-height:1.5}}
