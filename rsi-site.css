@@ -47,3 +47,6 @@ body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(24px,3vw,42px)!importa
 @media(max-width:480px){.rsi-article h2{font-size:24px;line-height:1.4;text-wrap:pretty}.rsi-article h3{font-size:16px;line-height:1.5}}
 
 html[lang=en] .rsi-article p{text-align:left;text-align-last:auto;hyphens:none}
+
+/* Original report replay: no outer rounded clipping or forced minimum height. */
+.rsi-article .replay{border:0;border-radius:0;min-height:0;height:1100px}

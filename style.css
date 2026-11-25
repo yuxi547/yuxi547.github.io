@@ -542,3 +542,7 @@ html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
 @media(min-width:851px){.rsi-landscape img{object-fit:contain;object-position:center;width:100%;height:100%;max-width:100%;margin:0}}
 
 .news-body .news-report-label{font-style:italic;font-synthesis:style}
+
+/* Keep the complete landscape flush with the right edge. */
+@media(min-width:851px){.rsi-landscape img{object-position:right center}}
+@media(max-width:480px){html[lang="zh-CN"] .box-article-hero .box-description-continuation{display:block}}
