@@ -264,7 +264,7 @@ h1,h2,h3,.job-title,.type-row strong{font-variation-settings:normal}
 .product-stage p.stage-coming{position:absolute;top:100%;left:0;margin:12px 0 0}
 .stage-pending{background:#1a67f7;color:#fff}
 @media(hover:hover){.stage-pending:hover{background:#1a67f7;color:#fff}}
-.rsi-stage{background:#f6f7f8}
+.rsi-stage{background:#f6f7f8;align-items:center}
 .rsi-landscape img{filter:brightness(1.02);mix-blend-mode:multiply}
 .rsi-landscape:after{background:linear-gradient(90deg,#f6f7f8 0%,rgba(246,247,248,.8) 18%,rgba(246,247,248,.15) 53%,transparent 72%)}
 @media(max-width:850px){.product-stage{padding-bottom:106px}.rsi-landscape:after{background:linear-gradient(0deg,#f6f7f8 3%,rgba(246,247,248,.86) 32%,transparent 68%)}}
@@ -348,7 +348,7 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
 .box-stage .box-image-space{inset:9% 6% 9% 56%;z-index:0;pointer-events:none;mask-image:none}
 .box-image-space img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;filter:drop-shadow(0 18px 20px rgba(55,78,105,.1))}
 .box-stage .stage-secondary{background:rgba(255,255,255,.5)}
-.rsi-stage{background:#f6f7f8}
+.rsi-stage{background:#f6f7f8;align-items:center}
 .rsi-landscape img{mix-blend-mode:multiply;filter:brightness(1.02);opacity:1}
 .rsi-landscape:after{background:linear-gradient(90deg,#f6f7f8 0%,rgba(246,247,248,.8) 18%,rgba(246,247,248,.15) 53%,transparent 72%)}
 @media(max-width:850px){
@@ -487,7 +487,7 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
 .news-body .news-chapter-number,.news-body .news-report-label,.news-body .news-report-link{text-align:start}
 /* The same copy-first product sequence on tablets and phones. */
 @media(max-width:850px){
- .rsi-stage{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:48px 6% 48px;gap:28px}
+ .rsi-stage{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:48px 6% 40px;gap:28px;min-height:0}
  .rsi-stage .stage-copy{order:0;max-width:100%;margin:0}
  .rsi-stage .rsi-landscape{position:relative;inset:auto;z-index:0;order:1;width:100%;height:auto;margin:0;flex:none}
  .rsi-stage .rsi-landscape img{mask-image:none;-webkit-mask-image:none;display:block;width:100%;max-width:100%;height:auto;margin:0;object-fit:contain;object-position:center}
@@ -496,7 +496,7 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
  .product-stage .stage-copy>h2:not(.stage-product-name),.product-stage .stage-copy>h3{max-width:none;text-wrap:pretty}
 }
 @media(max-width:480px){
- .rsi-stage{padding:32px 24px 48px;gap:24px}
+ .rsi-stage{padding:48px 24px 32px;gap:24px;min-height:0}
  .rsi-stage h2.stage-product-name{font-size:clamp(29px,7.6vw,36px)}
  .product-stage .stage-copy>h2:not(.stage-product-name),.product-stage .stage-copy>h3{font-size:clamp(20px,5.2vw,23px);max-width:none}
  .news-article>h1{font-size:clamp(23px,5.9vw,28px);line-height:1.4;text-wrap:pretty}
@@ -520,3 +520,6 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
  .box-release-article .stats strong{font-size:30px;grid-column:2;grid-row:1 / span 2;justify-content:flex-end}
  .box-release-article .stats>div>small{grid-column:1;font-size:12px}
 }
+
+/* Match the two desktop product names and their vertical rhythm. */
+@media(min-width:851px){.rsi-stage h2.stage-product-name{font-size:clamp(40px,4.7vw,72px)}}
