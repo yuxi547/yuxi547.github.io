@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><head><link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-brand.png"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="description" content="Hyperplane Robotics — Intelligence for the physical world. Product news, careers and official channels."><title>Introducing HyperBrain RSI-Preview: A General-Purpose, Self-Evolving Physical Agent Architecture · Hyperplane Robotics</title><link rel="alternate" hreflang="zh-CN" href="/plan-a/news/hyperbrain-rsi-preview-release/"><link rel="alternate" hreflang="en" href="/plan-a/en/news/hyperbrain-rsi-preview-release/"><link rel="stylesheet" href="/style.css?v=20261125-site-polish"><script src="/app.js" defer></script><link rel="stylesheet" href="/plans.css"></head><body id="top" data-page="news/hyperbrain-rsi-preview-release" data-lang="en"><a class="skip" href="#main">Skip to content</a><header><a class="logo" href="/plan-a/en/" aria-label="Hyperplane Robotics home"><img src="/assets/wordmark.png" alt="Hyperplane Robotics" width="364" height="86"></a><div class="header-actions"><nav aria-label="Main navigation"><a href="/plan-a/en/" data-route="home">Home</a><details class="product-menu"><summary>Products</summary><div class="product-dropdown"><a href="/plan-a/en/products/hyperbrain-box/">HyperBrain Box</a><a href="/plan-a/en/products/hyperbrain-rsi/">HyperBrain RSI</a></div></details><a href="/plan-a/en/news/" data-route="news">News</a><a href="/plan-a/en/careers/" data-route="careers">Careers</a><a href="/plan-a/en/contact/" data-route="contact">Contact Us</a></nav><a class="language-switch" href="/plan-a/news/hyperbrain-rsi-preview-release/" lang="zh" hreflang="zh" aria-label="切换为中文">中文</a><button class="menu" aria-expanded="false" aria-label="Open navigation"><svg width="22" height="22" viewbox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button></div></header><main id="main"><article class="news-article news-article--rsi"><a class="news-back" href="/plan-a/en/news/">Back to news</a><h1>Introducing HyperBrain RSI-Preview: A General-Purpose, Self-Evolving Physical Agent Architecture</h1><div class="news-meta"><time datetime="2026-11-17">2026 / 11 / 17</time><span>Hyperplane Robotics</span></div><div class="news-tags"><span class="news-tag">Product launch</span><span class="news-tag">Technical insights</span><span class="news-tag">HyperBrain RSI</span></div><div class="news-body"><p>Hyperplane Robotics introduces HyperBrain RSI-Preview, a general-purpose, self-evolving physical agent architecture. Using the official evaluation scripts for the RoboDojo robot-learning benchmark, we completed local testing across 54 task configurations and 2,100 episodes. The overall score was 78.87, with a 73.50% success rate; memory and precision scores reached 96.17 and 91.08 respectively <sup class="news-footnote-ref"><a href="#rsi-note-1" aria-label="Footnote 1">[1]</a></sup>, comparable to NVIDIA SOLVE, the current leader on the agent leaderboard.</p>
+<figure><img src="/assets/rsi-news-1.jpg" width="1080" height="1001" alt="Local RoboDojo evaluation results" loading="lazy"></figure>
+
+<p>Beyond these results, we are focused on a longer-term question: can robots turn every task into a learning opportunity and continue to evolve as they operate?</p>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 01</p>
+<h2>Giving Robots Their Own Flywheel for Continuous Improvement</h2>
+</div>
+<p>Progress in embodied intelligence has long depended on manually collected demonstrations, which are costly and slow to scale. To overcome this bottleneck, robots need to learn from execution: accumulating experience as they complete tasks autonomously and continually converting that experience into greater capability.</p>
+
+<p>Closing the loop from task execution to experience accumulation and capability growth is the starting point for HyperBrain RSI-Preview. We want every action to lay the groundwork for the next improvement.</p>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 02</p>
+<h2>The Technology Behind the Results</h2>
+</div>
+<p>HyperBrain RSI-Preview is built on Claude Opus 5.5, with no training or fine-tuning required throughout the process. Apart from the foundation model, we independently built the core modules, including the runtime loop, skill system, motion primitives, task memory and tool calls.</p>
+
+<figure><img src="/assets/rsi-news-13.png" width="1080" height="1113" alt="HyperBrain RSI-Preview architecture" loading="lazy"><figcaption><span>HyperBrain RSI-Preview architecture overview</span></figcaption></figure>
+
+<p>We focused on three areas to build this closed loop for physical agents:</p>
+
+<h3>01. Making Long-Horizon Task Execution More Reliable</h3>
+
+<p>Long-horizon tasks require more than execution: they also demand memory, reasoning and verification. Traditional end-to-end policies typically output actions directly, without intermediate verification. When deviations occur, they may go uncorrected and compound during subsequent execution. HyperBrain RSI-Preview addresses this with the following approaches:</p>
+
+<div class="news-methods"><section class="news-method"><h4>a. Write programs instead of outputting actions directly</h4>
+<p>Generate executable programs for tasks, verifying and deciding each step based on actual outcomes. Stop and adjust immediately after failure, rather than continuing along a predetermined plan.</p>
+</section><section class="news-method"><h4>b. Measure in real time and actively verify the environment</h4>
+<p>The system relies solely on three RGB cameras for measurement. When a measurement is unreliable, it actively changes the viewpoint and measures again until it obtains trustworthy feedback.</p>
+</section></div>
+<p>In local RoboDojo tests, HyperBrain RSI-Preview scored 96.17 on memory, 91.08 on precision and 78.01 on long-horizon tasks. Of the 54 task configurations, 24 scored above 90.</p>
+
+<p>The marker-placement task below shows HyperBrain RSI-Preview correcting its own errors without human intervention. It diagnoses the cause of failure and adapts its approach to complete the complex task successfully.</p>
+
+<figure class="news-demo"><video controls="controls" playsinline="playsinline" preload="metadata" poster="/assets/rsi-marker-poster.jpg" width="1256" height="1080" aria-label="Marker placement demonstration"><source src="/assets/rsi-marker-demo.mp4" type="video/mp4"></source><a href="/assets/rsi-marker-demo.mp4">Open video</a></video><figcaption class="news-demo-caption"><span>Key steps:</span><span>4/8 — The first white marker fails to enter the pen holder.</span><span>7/8 — After changing its approach, the robot successfully places the dropped white marker into the pen holder.</span></figcaption></figure>
+
+<h3>02. Using Resources on Demand for More Efficient Execution</h3>
+
+<p>A single large-model inference often takes several seconds, while a robot control cycle lasts only tens of milliseconds. If every action depends on a model decision, the time and monetary costs become too high for practical deployment.</p>
+
+<p>HyperBrain RSI-Preview reduces costs in three ways:</p>
+
+<div class="news-methods"><section class="news-method"><h4>a. Program-driven execution</h4>
+<p class="news-method-summary">Generate multi-step programs with fewer model calls.</p>
+<p>The model generates programs rather than making decisions one step at a time. In a block-stacking task, the robot performed 515 actions with just 6 model calls.</p>
+</section><section class="news-method"><h4>b. Local state measurement</h4>
+<p class="news-method-summary">Measure state locally so reasoning can focus on decisions.</p>
+<p>State information such as position is measured locally and returned as numbers. The model only needs to review the most recent observations, avoiding continuous growth of the context.</p>
+</section><section class="news-method"><h4>c. Cache reuse</h4>
+<p class="news-method-summary">Build each inference on existing results.</p>
+<p>Prompts and conversation history are cached and reused together, reducing repeated computation and reserving more compute for problems that actually require reasoning.</p>
+</section></div>
+<p>Across 2,100 local RoboDojo episodes, model calls cost a total of US$1,219.51, or approximately US$0.58 per episode. This offers better cost efficiency than publicly reported per-episode costs of roughly US$1 to US$2.50.</p>
+
+<p>The cost of improving capability is also manageable. With the foundation model unchanged, HyperBrain RSI-Preview improved its overall score from 38.9 to 78.87, while total model-call costs during development remained below US$2,000.</p>
+
+<p>For both task execution and continued optimization, shorter waits and lower costs provide a practical foundation for long-term robot operation and large-scale task execution.</p>
+
+<h3>03. Turning Execution Feedback into Continuous Improvement</h3>
+
+<p>Being able to execute does not mean having learned. Capability truly grows only when feedback from a task can be retained and reused.</p>
+
+<p>In HyperBrain RSI-Preview, an optimization agent automatically analyzes the execution logs after each batch of tasks, identifies causes of failure and writes the resulting lessons into task notes and tools. Each new version is compared with the previous version on the same layouts, and only changes that demonstrably improve performance are retained.</p>
+
+<p>Experience therefore extends beyond any single task. A failure caused by an incorrect grasp pose, a missed step in a sequence or an incorrect state assessment is retained as a lesson, so that the next batch of tasks is less likely to repeat the same mistake.</p>
+
+<p>The foundation model remains unchanged throughout. Only the readable, inspectable and continually improvable notes and code evolve.</p>
+
+<p>Using the same foundation model, successive rounds of accumulated experience increased the average score from 38.9 for the initial version on training layouts to 78.87 for the final version on unseen test seeds.</p>
+
+<figure><img src="/assets/rsi-news-49.gif" width="480" height="434" alt="Optimized build_tower demonstration" loading="lazy"><figcaption><span>The build_tower task after optimization</span></figcaption></figure>
+
+<p>In the build_tower task, for example, HyperBrain RSI-Preview iteratively improves task instructions and tools using execution logs. It adjusts gripper movements and wrist rotation, improves the transport process to avoid knocking over pillars, and then adds tools for placing planks and the roof. The final version scored 98.2 in an independent test, completing 49 of 50 layouts.</p>
+
+<figure><img src="/assets/rsi-news-52.png" width="811" height="450" alt="Average build_tower scores" loading="lazy"><figcaption><span>Average scores across successive improvements and testing for build_tower</span><span>Test: seeds that were never seen in any optimization round.</span></figcaption></figure>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 03</p>
+<h2>What Comes Next for Embodied Intelligence</h2>
+</div>
+<p>HyperBrain RSI-Preview provides initial evidence that robots can not only execute tasks, but also continually improve based on execution outcomes.</p>
+
+<p>Reliable execution, manageable costs and accumulated experience are parts of the same closed loop. Capability can grow during operation only when tasks are completed reliably, feedback is continuously recorded and experience is retained. For embodied intelligence, this may offer a more sustainable path forward than simply increasing model size.</p>
+
+<p>Hyperplane Robotics will continue developing this loop of execution, feedback and evolving experience, enabling robots to keep learning and improving through real tasks. We will share further progress as it unfolds. Next, we will put the system to the test in real-world scenarios.</p>
+
+<p class="news-report-label">HyperBrain RSI-Preview technical report:</p>
+
+<p class="news-report-link"><a href="https://maoningge.github.io/hyperbrain-rsi-preview/" target="_blank" rel="noopener noreferrer">Read the complete technical report</a></p>
+
+<p id="rsi-note-1" class="news-footnote" role="doc-endnote">[1] These results are from local tests completed before RoboDojo released new rules for its agent track on November 14.</p>
+
+<h2>About Hyperplane Robotics</h2>
+
+<p>Hyperplane Robotics is an embodied-intelligence brain subsidiary incubated by Joyson Electronics. Drawing on Joyson’s extensive experience in automotive-grade mass production and industrial applications, it is dedicated to building the AGI brain platform for the physical world.</p>
+
+<p>Hyperplane Robotics brings together experienced technical experts from leading universities worldwide, including Tsinghua University, Peking University and the Technical University of Munich. Its team has deep expertise in complex electromechanical systems, autonomous driving, embodied-intelligence algorithms and large models, combining original technological innovation with the ability to deliver products at million-unit scale.</p></div><a class="news-back" href="/plan-a/en/news/">All news</a></article></main><footer><div class="foot-top"><a class="logo" href="/plan-a/en/"><img src="/assets/wordmark.png" alt="Hyperplane Robotics" width="364" height="86"></a><div><a href="/plan-a/en/products/hyperbrain-box/">HyperBrain Box</a><a href="/plan-a/en/products/hyperbrain-rsi/">HyperBrain RSI</a><a href="/plan-a/en/careers/">Careers</a><a href="/plan-a/en/contact/">Contact Us</a></div><div class="footer-connect"><div class="social-icons"><a href="https://www.xiaohongshu.com/user/profile/5ae6b36611be101f596262b5" class="social-icon" aria-label="Rednote" title="Rednote" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.5 4H18.5L20 5.5V18.5L18.5 20H5.5L4 18.5V5.5L5.5 4Z" stroke="currentColor" stroke-width="2"></path>
+<path fill="currentColor" d="M16.994 10.982c.001 .008 .005 .01 .034 .009h.348a.383 .383 0 0 0 .374-.467 .381 .381 0 0 0-.424-.296 .382 .382 0 0 0-.332 .381c0 .048-.001 .32 0 .373z m-5.524 2.308c-.097 0-.649 .002-.809 .001a1.213 1.213 0 0 1-.367-.06 .012 .012 0 0 0-.015 .006L9.936 13.981a.012 .012 0 0 0 .005 .015c.053 .029 .161 .06 .237 .06 .317 .005 .634 .001 .951 0 .005 0 .01-.003 .011-.007l.342-.742a.012 .012 0 0 0-.011-.017zM6.469 10.997c-.034 0-.036 .001-.037 .005a.4 .4 0 0 0-.004 .038c-.013 .191-.018 .238-.113 1.469-.006 .115-.016 .187-.064 .291-.012 .027-.016 .02 .001 .054 .022 .044 .327 .731 .378 .835 .004 .007 .005 .01 .008 .01 .004 0 .016-.012 .022-.021 .071-.09 .129-.188 .179-.291 .147-.305 .211-.636 .233-.819 .007-.053 .01-.106 .014-.159l.098-1.255 .011-.141c.001-.014 0-.016-.015-.016z m3.457 1.803a.685 .685 0 0 1-.064-.291c-.002-.04-.015-.187-.113-1.469a.213 .213 0 0 0-.005-.039c-.002-.005-.025-.004-.036-.004h-.711c-.014 0-.016 .002-.014 .016l.01 .141c.036 .471 .073 .943 .112 1.414 .024 .192 .089 .521 .233 .819 .049 .103 .107 .201 .178 .291 .007 .009 .018 .024 .023 .023 .01-.001 .356-.788 .386-.847 .017-.034 .014-.026 .001-.054z m1.854-.438h-.419a.06 .06 0 0 1-.056-.086l.566-1.26a.012 .012 0 0 0-.011-.016l-.633-.002a.071 .071 0 0 1-.065-.101l.421-.937a.012 .012 0 0 0-.011-.017h-.749c-.005 0-.01 .003-.011 .007l-.445 .993c-.041 .081-.151 .304-.191 .45a.256 .256 0 0 0-.01 .091 .221 .221 0 0 0 .11 .182 .471 .471 0 0 0 .221 .057h.283c.02 0-.33 .711-.4 .947a.254 .254 0 0 0-.011 .082 .223 .223 0 0 0 .11 .191c.072 .044 .164 .058 .228 .058l.797-.001c.005 0 .01-.003 .011-.007l.276-.614a.012 .012 0 0 0-.011-.017z m-3.327-2.37H7.728a.015 .015 0 0 0-.016 .016c0 .503-.005 1.342-.005 3.278 0 .138-.129 .126-.135 .126h-.355c-.019 0-.021 .002-.019 .022 0 .018 .223 .511 .266 .606 .005 .01 .014 .016 .025 .016 .075 .001 .368 .004 .45-.006 .073-.01 .144-.029 .21-.064 .144-.075 .235-.201 .286-.367 .025-.083 .036-.169 .036-.256 .001-1.118 0-2.237-.003-3.355a.015 .015 0 0 0-.016-.016z m5.657 3.31c0-.007-.005-.01-.012-.01h-.703c-.023 0-.024-.001-.024-.024v-2.237c0-.035-.002-.034 .033-.033h.415c.038 0 .036 .002 .036-.036V10.269c0-.039 .003-.036-.039-.037h-1.68c-.031 0-.036-.003-.036 .035v.694c0 .04-.003 .037 .039 .037h.41c.036 0 .034-.002 .033 .033v2.22c0 .046 .004 .04-.041 .04-.178 0-.533-.001-.625 0-.023 0-.029 .014-.029 .015l-.335 .729s-.007 .012-.004 .017c.003 .005 .006 .004 .028 .004 .839 .001 1.678 .001 2.517 .001 .014 0 .016-.003 .017-.016v-.739z m2.005-1.646c0 .006-.003 .011-.01 .011-.166 .003-.332 .002-.498 .002-.007-.001-.011-.005-.01-.011-.002-.208-.003-.417-.005-.626 0-.035-.003-.034 .033-.033l.352-.002c.02 0 .039 .001 .058 .007 .045 .012 .077 .051 .079 .098 .003 .207 .001 .553 .001 .554z m1.281 .117a.937 .937 0 0 0-.424-.107h-.086c-.019 0-.019-.001-.02-.019V11.141c0-.063-.003-.126-.012-.189a.875 .875 0 0 0-.074-.255 .736 .736 0 0 0-.325-.341 1.04 1.04 0 0 0-.48-.123c-.073-.001-.272 0-.345 0-.034 0-.033 .002-.033-.032V9.965c0-.015-.005-.02-.022-.019H14.846s-.008 0-.011 .003c-.003 .003-.004 .006-.003 .011v.263c-.004 .017-.027 .007-.04 .01h-.456c-.011 .001-.013 .004-.014 .015v.711c0 .043-.002 .039 .039 .04h.438c.039 0 .035 .061 .035 .061V11.611s.001 .056-.029 .056h-.711c-.033 0-.029 .039-.029 .04v.693s-.005 .033 .031 .033h.699c.039 0 .036-.003 .037 .038v1.548c0 .042-.003 .039 .039 .039h.686c.043 0 .039 .003 .04-.039v-1.569c0-.014 .003-.017 .015-.017l1.116-.001c.047 0 .092 .01 .134 .029a.221 .221 0 0 1 .131 .195c.004 .19 .001 .379 .002 .569 0 .124-.051 .176-.159 .176h-.584c-.011 .001-.014 .004-.014 .016 .088 .21 .18 .418 .274 .625a.022 .022 0 0 0 .019 .013c.082 .002 .163 .001 .245 .001 .072-.001 .248 .002 .32-.004a.974 .974 0 0 0 .196-.036c.283-.086 .468-.335 .468-.631v-.951c0-.061-.005-.122-.016-.182 0 .037-.014-.308-.348-.479z"></path>
+</svg>
+</a><a href="https://x.com/Hyperplanexteam" class="social-icon" aria-label="X" title="X" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 5H9L20 19H15L4 5Z" stroke="currentColor" stroke-width="2"></path>
+<path d="M19.5 5L13.44 10.65M10.56 13.35L4.5 19" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</a><a href="/plan-a/en/contact/#wechat" class="social-icon" aria-label="WeChat Official Account QR code" title="WeChat Official Account QR code"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.99 14.85A6.5 5.5 0 1 1 15.9 8.52" stroke="currentColor" stroke-width="2"></path>
+<ellipse cx="15.5" cy="15" rx="5" ry="4" stroke="currentColor" stroke-width="2"></ellipse>
+<rect x="6.5" y="7.5" width="2" height="2" fill="currentColor"></rect>
+<rect x="10.5" y="7.5" width="2" height="2" fill="currentColor"></rect>
+<rect x="13" y="14" width="1.5" height="1.5" fill="currentColor"></rect>
+<rect x="16.5" y="14" width="1.5" height="1.5" fill="currentColor"></rect>
+<path d="M5 13.5L4 17.5L8 15.5L5 13.5Z" fill="currentColor"></path>
+<path d="M18 18L20.5 20.5L20 17L18 18Z" fill="currentColor"></path>
+</svg>
+</a><a href="/plan-a/en/contact/#channels" class="social-icon" aria-label="WeChat Channels QR code" title="WeChat Channels QR code"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32 32" fill="none"><path d="M16 18C12 10 8 4 5 6 1 10 7 27 11 26 16 25 22 5 27 6 32 8 25 29 21 26 15 22 10 7 5 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div></div></div><div class="foot-bottom"><small>© 2026 Hyperplane Robotics; All rights reserved</small><a href="#top">Back to top</a></div></footer></body></html>

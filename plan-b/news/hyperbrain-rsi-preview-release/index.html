@@ -1,0 +1,114 @@
+<!doctype html><html lang="zh-CN"><head><link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-brand.png"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="description" content="Hyperplane Robotics 超平面 — 面向物理世界的智能。产品发布、团队招聘与官方联系渠道。"><title>通用自进化物理 Agent 架构 HyperBrain RSI-Preview 正式发布 · Hyperplane Robotics</title><link rel="alternate" hreflang="zh-CN" href="/plan-b/news/hyperbrain-rsi-preview-release/"><link rel="alternate" hreflang="en" href="/plan-b/en/news/hyperbrain-rsi-preview-release/"><link rel="stylesheet" href="/style.css?v=20261125-site-polish"><script src="/app.js" defer></script><link rel="stylesheet" href="/plans.css"></head><body id="top" data-page="news/hyperbrain-rsi-preview-release" data-lang="zh"><a class="skip" href="#main">跳转到正文</a><header><a class="logo" href="/plan-b/" aria-label="超平面首页"><img src="/assets/wordmark.png" alt="Hyperplane Robotics" width="364" height="86"></a><div class="header-actions"><nav aria-label="主导航"><a href="/plan-b/" data-route="home">首页</a><details class="product-menu"><summary>产品介绍</summary><div class="product-dropdown"><a href="/plan-b/products/hyperbrain-box/">HyperBrain Box</a><a href="/plan-b/products/hyperbrain-rsi/">HyperBrain RSI</a></div></details><a href="/plan-b/news/" data-route="news">新闻资讯</a><a href="/plan-b/careers/" data-route="careers">加入我们</a><a href="/plan-b/contact/" data-route="contact">联系我们</a></nav><a class="language-switch" href="/plan-b/en/news/hyperbrain-rsi-preview-release/" lang="en" hreflang="en" aria-label="Switch to English">EN</a><button class="menu" aria-expanded="false" aria-label="展开导航"><svg width="22" height="22" viewbox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button></div></header><main id="main"><article class="news-article news-article--rsi"><a class="news-back" href="/plan-b/news/">返回新闻资讯</a><h1>通用自进化物理 Agent 架构 HyperBrain RSI-Preview 正式发布</h1><div class="news-meta"><time datetime="2026-11-17">2026 / 11 / 17</time><span>超平面机器人</span></div><div class="news-tags"><span class="news-tag">产品发布</span><span class="news-tag">技术分享</span><span class="news-tag">HyperBrain RSI</span></div><div class="news-body"><p>超平面机器人推出通用自进化物理 Agent 架构 HyperBrain RSI-Preview。在机器人学习基准 RoboDojo 榜单上，我们用基准的官方评测脚本完成了本地测试：54 个任务配置、2100 局，综合得分 78.87，成功率 73.50%；其中记忆类 96.17，精度类 91.08<sup class="news-footnote-ref"><a href="#rsi-note-1" aria-label="脚注 1">[1]</a></sup> , 比肩当前 Agent 榜首英伟达 SOLVE。</p>
+<figure><img src="/assets/rsi-news-1.jpg" width="1080" height="1001" alt="RoboDojo 本地测试结果" loading="lazy"></figure>
+
+<p>成绩之外，我们关注更长远的问题：机器人能否将每一次任务转化为学习机会，并在持续执行中不断进化。</p>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 01</p>
+<h2>让机器人拥有属于自己的进化飞轮</h2>
+</div>
+<p>具身智能的能力提升，长期依赖人工采集的示范数据，成本高、增长慢。要突破这一瓶颈，机器人需要学会从执行中学习，在自主完成任务的同时积累经验，并将经验持续转化为能力增长。</p>
+
+<p>打通从任务执行到经验积累，再到能力增长的物理 Agent 工作闭环，正是 HyperBrain RSI-Preview 的出发点。我们希望，让每一次行动都为下一次进步创造条件。</p>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 02</p>
+<h2>成绩背后的关键技术支撑</h2>
+</div>
+<p>HyperBrain RSI-Preview 基于 Claude Opus 5.5 构建，全程无需训练或微调。除基础模型外，运行循环、技能系统、运动原语、任务记忆与工具调用等核心模块均由我们自主构建。</p>
+
+<figure><img src="/assets/rsi-news-13.png" width="1080" height="1113" alt="HyperBrain RSI-Preview 技术架构" loading="lazy"><figcaption><span>HyperBrain RSI-Preview 技术架构简图</span></figcaption></figure>
+
+<p>围绕这一物理 Agent 闭环，我们主要做了三件事：</p>
+
+<h3>01. 应对长程任务，让行动更可靠</h3>
+
+<p>长程任务考验的不只是执行能力，还包括记忆、推理与验证能力。传统的端到端策略通常直接输出动作，缺乏中间验证机制。一旦出现偏差，无法及时纠正，会导致后续执行中持续放大。针对于此，HyperBrain RSI-Preview 采用以下方法：</p>
+
+<div class="news-methods"><section class="news-method"><h4>a. 写程序，而非直接输出动作</h4>
+<p>将任务生成可执行程序，每一步都基于真实结果验证与决策；失败立即停止并调整，而不是沿着预设计划持续执行</p>
+</section><section class="news-method"><h4>b. 实时测量，主动验证环境</h4>
+<p>系统仅依赖三台 RGB 相机完成测量，当测量结果不可靠时，会主动调整观察视角并重新测量，直至获得可信反馈</p>
+</section></div>
+<p>在 RoboDojo 本地测试中，HyperBrain RSI-Preview 取得了记忆类 96.17、精度类 91.08、长程类 78.01 的成绩；54 个任务配置中，24 个得分超过 90。</p>
+
+<p>通过下面将马克笔放入笔筒的任务，可以发现，在无人干预的情况下，HyperBrain RSI-Preview 自主进行纠偏，并能够诊断失败原因，灵活改变操作方式，成功完成复杂任务。</p>
+
+<figure class="news-demo"><video controls="controls" playsinline="playsinline" preload="metadata" poster="/assets/rsi-marker-poster.jpg" width="1256" height="1080" aria-label="马克笔放入笔筒演示"><source src="/assets/rsi-marker-demo.mp4" type="video/mp4"></source><a href="/assets/rsi-marker-demo.mp4">打开视频</a></video><figcaption class="news-demo-caption"><span>关键步骤：</span><span>4/8 — 第一支白笔未能放入</span><span>7/8 — 改变操作方式，成功将掉落的白笔放入笔筒</span></figcaption></figure>
+
+<h3>02. 按需调用资源，让执行更高效</h3>
+
+<p>大模型一次推理往往需要数秒，而机器人的控制周期只有几十毫秒。如果每一步动作都依赖模型决策，时间成本和金钱成本太高，很难在实际中落地。</p>
+
+<p>HyperBrain RSI-Preview 通过三种方式降低成本：</p>
+
+<div class="news-methods"><section class="news-method"><h4>a. 程序驱动执行</h4>
+<p class="news-method-summary">少量调用，一次生成多步程序</p>
+<p>模型负责生成程序，而非逐步决策。在叠积木任务中，机器人执行 515 个动作，模型仅调用 6 次</p>
+</section><section class="news-method"><h4>b. 状态本地化</h4>
+<p class="news-method-summary">状态信息本地测量，让推理聚焦决策</p>
+<p>位置等状态信息在本地完成测量并以数字返回，模型只需查看最近几次观测结果，避免上下文持续膨胀</p>
+</section><section class="news-method"><h4>c. 缓存复用</h4>
+<p class="news-method-summary">让每次推理都建立在已有结果之上</p>
+<p>提示词与历史对话统一缓存复用，减少重复计算开销，将更多算力用于真正需要推理的问题</p>
+</section></div>
+<p>在 2100 局 RoboDojo 本地测试中，模型调用总成本为 1219.51 美元，平均每局约 0.58 美元。相比目前市面上已公开单回合花费（约1 到 2.5 美元），性价比更高。</p>
+
+<p>能力提升的成本同样可控，在基础模型保持不变的情况下，HyperBrain RSI-Preview 综合得分从 38.9 提升至 78.87，开发时调用的模型总成本不到 2000 美元。</p>
+
+<p>无论执行任务还是持续优化，更少的等待时间和更低的花费成本，为机器人长期运行和大规模任务执行提供了现实基础。</p>
+
+<h3>03. 利用执行反馈，让能力不断成长</h3>
+
+<p>会执行并不等于学会。只有当一次任务中的经验反馈能够被沉淀和复用时，能力才会真正增长。</p>
+
+<p>在 HyperBrain RSI-Preview 中，每完成一批任务，一个优化 Agent 会自动分析这一批执行日志，定位失败原因，并把得到的经验写入任务笔记和工具。新版本会在相同布局上与旧版本对比验证，只有确实带来提升的改动才会被保留。</p>
+
+<p>因此，经验不会停留在单次任务里。某一次因为夹取姿态错误、顺序记忆遗漏或状态判断失误而产生的失败，会被沉淀下来，让下一批任务少犯一次同样的错误。</p>
+
+<p>整个过程中基础模型保持不变，变化的只有这些可阅读、可检查、可持续迭代的笔记和代码。</p>
+
+<p>在同一个基础模型下，经过多轮经验累积，系统的平均得分从初始版本在训练布局上的 38.9 提升到最终版本在未见测试种子上的 78.87。</p>
+
+<figure><img src="/assets/rsi-news-49.gif" width="480" height="434" alt="build_tower 优化演示" loading="lazy"><figcaption><span>build_tower 案例优化后效果</span></figcaption></figure>
+
+<p>以build_tower任务为例，HyperBrain RSI-Preview 会根据运行日志逐轮改进任务说明和工具：它调整夹爪动作与手腕旋转方式，并针对柱子被碰倒的问题改进搬运流程，随后新增放置木板和屋顶的工具。最终测试版本在独立测试中取得了 98.2 分，50 个布局中完成了 49 个。</p>
+
+<figure><img src="/assets/rsi-news-52.png" width="811" height="450" alt="build_tower 平均得分" loading="lazy"><figcaption><span>build_tower 案例多轮改进及测试的平均得分</span><span>测试：任何一轮都未见过的测试种子</span></figcaption></figure>
+
+<div class="news-chapter-heading"><p class="news-chapter-number">CHAPTER 03</p>
+<h2>看见具身智能下一步</h2>
+</div>
+<p>HyperBrain RSI-Preview 初步证明了：机器人不仅能够执行任务，也能够根据执行结果持续改进。</p>
+
+<p>可靠执行、可控成本和经验积累并非彼此独立，而是构成同一个闭环。任务被稳定完成，反馈被持续记录，经验被不断沉淀，能力才能在运行中增长。对于具身智能而言，这或许是一条比单纯扩大模型规模更可持续的演进路径。</p>
+
+<p>未来，超平面机器人将继续推进执行、反馈与经验演化的闭环建设，让机器人在真实任务中持续成长、持续进化。后续进展将陆续分享，下一步，我们将在真实场景中接受检验。</p>
+
+<p class="news-report-label">HyperBrain RSI-Preview 技术报告链接：</p>
+
+<p class="news-report-link"><a href="https://maoningge.github.io/hyperbrain-rsi-preview/" target="_blank" rel="noopener noreferrer">阅读完整技术报告</a></p>
+
+<p id="rsi-note-1" class="news-footnote" role="doc-endnote">[1]：以上为本地测试成绩，完成于 RoboDojo 11 月 14 日发布智能体赛道新规之前</p>
+
+<h2>关于 超平面机器人</h2>
+
+<p>超平面机器人是均胜电子孵化的具身智能大脑子公司，依托均胜在车规级量产与工业场景的深厚积累，致力于构建面向物理世界AGI的大脑底座。</p>
+
+<p>超平面机器人汇聚了来自清华、北大、慕尼黑工业大学等全球顶级学府的资深技术专家，在复杂机电系统、自动驾驶、具身智能算法与大模型等领域持续深耕，具备从 0 到 1 的技术创新与百万级产品规模交付能力。</p></div><a class="news-back" href="/plan-b/news/">全部新闻</a></article></main><footer><div class="foot-top"><a class="logo" href="/plan-b/"><img src="/assets/wordmark.png" alt="Hyperplane Robotics" width="364" height="86"></a><div><a href="/plan-b/products/hyperbrain-box/">HyperBrain Box</a><a href="/plan-b/products/hyperbrain-rsi/">HyperBrain RSI</a><a href="/plan-b/careers/">加入我们</a><a href="/plan-b/contact/">联系我们</a></div><div class="footer-connect"><div class="social-icons"><a href="https://www.xiaohongshu.com/user/profile/5ae6b36611be101f596262b5" class="social-icon" aria-label="小红书" title="小红书" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.5 4H18.5L20 5.5V18.5L18.5 20H5.5L4 18.5V5.5L5.5 4Z" stroke="currentColor" stroke-width="2"></path>
+<path fill="currentColor" d="M16.994 10.982c.001 .008 .005 .01 .034 .009h.348a.383 .383 0 0 0 .374-.467 .381 .381 0 0 0-.424-.296 .382 .382 0 0 0-.332 .381c0 .048-.001 .32 0 .373z m-5.524 2.308c-.097 0-.649 .002-.809 .001a1.213 1.213 0 0 1-.367-.06 .012 .012 0 0 0-.015 .006L9.936 13.981a.012 .012 0 0 0 .005 .015c.053 .029 .161 .06 .237 .06 .317 .005 .634 .001 .951 0 .005 0 .01-.003 .011-.007l.342-.742a.012 .012 0 0 0-.011-.017zM6.469 10.997c-.034 0-.036 .001-.037 .005a.4 .4 0 0 0-.004 .038c-.013 .191-.018 .238-.113 1.469-.006 .115-.016 .187-.064 .291-.012 .027-.016 .02 .001 .054 .022 .044 .327 .731 .378 .835 .004 .007 .005 .01 .008 .01 .004 0 .016-.012 .022-.021 .071-.09 .129-.188 .179-.291 .147-.305 .211-.636 .233-.819 .007-.053 .01-.106 .014-.159l.098-1.255 .011-.141c.001-.014 0-.016-.015-.016z m3.457 1.803a.685 .685 0 0 1-.064-.291c-.002-.04-.015-.187-.113-1.469a.213 .213 0 0 0-.005-.039c-.002-.005-.025-.004-.036-.004h-.711c-.014 0-.016 .002-.014 .016l.01 .141c.036 .471 .073 .943 .112 1.414 .024 .192 .089 .521 .233 .819 .049 .103 .107 .201 .178 .291 .007 .009 .018 .024 .023 .023 .01-.001 .356-.788 .386-.847 .017-.034 .014-.026 .001-.054z m1.854-.438h-.419a.06 .06 0 0 1-.056-.086l.566-1.26a.012 .012 0 0 0-.011-.016l-.633-.002a.071 .071 0 0 1-.065-.101l.421-.937a.012 .012 0 0 0-.011-.017h-.749c-.005 0-.01 .003-.011 .007l-.445 .993c-.041 .081-.151 .304-.191 .45a.256 .256 0 0 0-.01 .091 .221 .221 0 0 0 .11 .182 .471 .471 0 0 0 .221 .057h.283c.02 0-.33 .711-.4 .947a.254 .254 0 0 0-.011 .082 .223 .223 0 0 0 .11 .191c.072 .044 .164 .058 .228 .058l.797-.001c.005 0 .01-.003 .011-.007l.276-.614a.012 .012 0 0 0-.011-.017z m-3.327-2.37H7.728a.015 .015 0 0 0-.016 .016c0 .503-.005 1.342-.005 3.278 0 .138-.129 .126-.135 .126h-.355c-.019 0-.021 .002-.019 .022 0 .018 .223 .511 .266 .606 .005 .01 .014 .016 .025 .016 .075 .001 .368 .004 .45-.006 .073-.01 .144-.029 .21-.064 .144-.075 .235-.201 .286-.367 .025-.083 .036-.169 .036-.256 .001-1.118 0-2.237-.003-3.355a.015 .015 0 0 0-.016-.016z m5.657 3.31c0-.007-.005-.01-.012-.01h-.703c-.023 0-.024-.001-.024-.024v-2.237c0-.035-.002-.034 .033-.033h.415c.038 0 .036 .002 .036-.036V10.269c0-.039 .003-.036-.039-.037h-1.68c-.031 0-.036-.003-.036 .035v.694c0 .04-.003 .037 .039 .037h.41c.036 0 .034-.002 .033 .033v2.22c0 .046 .004 .04-.041 .04-.178 0-.533-.001-.625 0-.023 0-.029 .014-.029 .015l-.335 .729s-.007 .012-.004 .017c.003 .005 .006 .004 .028 .004 .839 .001 1.678 .001 2.517 .001 .014 0 .016-.003 .017-.016v-.739z m2.005-1.646c0 .006-.003 .011-.01 .011-.166 .003-.332 .002-.498 .002-.007-.001-.011-.005-.01-.011-.002-.208-.003-.417-.005-.626 0-.035-.003-.034 .033-.033l.352-.002c.02 0 .039 .001 .058 .007 .045 .012 .077 .051 .079 .098 .003 .207 .001 .553 .001 .554z m1.281 .117a.937 .937 0 0 0-.424-.107h-.086c-.019 0-.019-.001-.02-.019V11.141c0-.063-.003-.126-.012-.189a.875 .875 0 0 0-.074-.255 .736 .736 0 0 0-.325-.341 1.04 1.04 0 0 0-.48-.123c-.073-.001-.272 0-.345 0-.034 0-.033 .002-.033-.032V9.965c0-.015-.005-.02-.022-.019H14.846s-.008 0-.011 .003c-.003 .003-.004 .006-.003 .011v.263c-.004 .017-.027 .007-.04 .01h-.456c-.011 .001-.013 .004-.014 .015v.711c0 .043-.002 .039 .039 .04h.438c.039 0 .035 .061 .035 .061V11.611s.001 .056-.029 .056h-.711c-.033 0-.029 .039-.029 .04v.693s-.005 .033 .031 .033h.699c.039 0 .036-.003 .037 .038v1.548c0 .042-.003 .039 .039 .039h.686c.043 0 .039 .003 .04-.039v-1.569c0-.014 .003-.017 .015-.017l1.116-.001c.047 0 .092 .01 .134 .029a.221 .221 0 0 1 .131 .195c.004 .19 .001 .379 .002 .569 0 .124-.051 .176-.159 .176h-.584c-.011 .001-.014 .004-.014 .016 .088 .21 .18 .418 .274 .625a.022 .022 0 0 0 .019 .013c.082 .002 .163 .001 .245 .001 .072-.001 .248 .002 .32-.004a.974 .974 0 0 0 .196-.036c.283-.086 .468-.335 .468-.631v-.951c0-.061-.005-.122-.016-.182 0 .037-.014-.308-.348-.479z"></path>
+</svg>
+</a><a href="https://x.com/Hyperplanexteam" class="social-icon" aria-label="X" title="X" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 5H9L20 19H15L4 5Z" stroke="currentColor" stroke-width="2"></path>
+<path d="M19.5 5L13.44 10.65M10.56 13.35L4.5 19" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</a><a href="/plan-b/contact/#wechat" class="social-icon" aria-label="微信公众号二维码" title="微信公众号二维码"><svg aria-hidden="true" focusable="false" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.99 14.85A6.5 5.5 0 1 1 15.9 8.52" stroke="currentColor" stroke-width="2"></path>
+<ellipse cx="15.5" cy="15" rx="5" ry="4" stroke="currentColor" stroke-width="2"></ellipse>
+<rect x="6.5" y="7.5" width="2" height="2" fill="currentColor"></rect>
+<rect x="10.5" y="7.5" width="2" height="2" fill="currentColor"></rect>
+<rect x="13" y="14" width="1.5" height="1.5" fill="currentColor"></rect>
+<rect x="16.5" y="14" width="1.5" height="1.5" fill="currentColor"></rect>
+<path d="M5 13.5L4 17.5L8 15.5L5 13.5Z" fill="currentColor"></path>
+<path d="M18 18L20.5 20.5L20 17L18 18Z" fill="currentColor"></path>
+</svg>
+</a><a href="/plan-b/contact/#channels" class="social-icon" aria-label="微信视频号二维码" title="微信视频号二维码"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32 32" fill="none"><path d="M16 18C12 10 8 4 5 6 1 10 7 27 11 26 16 25 22 5 27 6 32 8 25 29 21 26 15 22 10 7 5 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div></div></div><div class="foot-bottom"><small>© 2026 Hyperplane Robotics; All rights reserved</small><a href="#top">回到顶部</a></div></footer></body></html>

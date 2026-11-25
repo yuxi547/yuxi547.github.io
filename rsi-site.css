@@ -18,3 +18,27 @@
 @media(max-width:900px){.rsi-article .hero{padding-top:40px}.rsi-article .hero .col{grid-template-columns:1fr;gap:32px}.rsi-article h1{text-align:left}.rsi-article .lede{font-size:20px}.rsi-article .col,.rsi-article .wide{padding-inline:24px}.rsi-article .eq .lines{font-size:15px}.rsi-article .replay{min-height:900px}}
 @media(max-width:480px){.rsi-article h1{font-size:28px;overflow-wrap:anywhere}.rsi-article .rsi-toc{gap:4px 20px}.rsi-article .rounds .test{margin-left:8px}.rsi-article .rounds div{flex-basis:48px}.rsi-article .facts{font-size:13px;gap:0 14px}.rsi-article .facts dt{font-size:12px}.rsi-article .eq>div{padding:20px 16px}}
 body[data-page=rsi] main>article.product-copy{max-width:none;width:100%}
+
+/* Keep the entire scientific illustration within the article layout. */
+.rsi-article .hero{overflow:visible}
+.rsi-article .hero .col{grid-template-columns:minmax(0,1.1fr) minmax(0,.85fr);gap:32px}
+.rsi-article .plane{position:relative;inset:auto;width:100%;height:auto;max-width:100%;z-index:0;grid-column:2;grid-row:1 / span 2;mask-image:none;-webkit-mask-image:none;opacity:1;overflow:visible}
+.rsi-article .hero .col>div{grid-column:1}
+.rsi-article h1{white-space:nowrap;text-wrap:nowrap;overflow-wrap:normal;font-size:clamp(24px,3vw,42px)}
+@media(max-width:900px){.rsi-article .hero .col{display:flex;flex-direction:column;align-items:stretch}.rsi-article .plane{order:3;max-width:680px;align-self:center}.rsi-article h1{font-size:clamp(19px,4.7vw,40px)}.rsi-article .hero{padding-top:40px}}
+
+body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(24px,3vw,42px)!important;white-space:nowrap;overflow-wrap:normal}
+@media(max-width:900px){body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(17px,4.5vw,36px)!important}}
+
+
+/* Preserve readable technical text across phone and tablet widths. */
+.rsi-article{--mute:#5f6570;--accent:#1255d6}
+.rsi-article .lab{font-size:14px;line-height:1.7}
+.rsi-article .cards small,.rsi-article .cards em,.rsi-article .cats,.rsi-article .parts i{font-size:12px;line-height:1.6}
+.rsi-article .rounds span{font-size:12px;line-height:1.5}
+@media(max-width:900px){
+ .rsi-article .eq pre{font-size:12.5px;overflow-x:auto;padding-bottom:8px}
+ .rsi-article .eq pre span{min-width:max-content;flex-wrap:nowrap;gap:16px}
+ .rsi-article .eq pre small{font-size:11px}
+ .rsi-article .steps{row-gap:8px}
+}
