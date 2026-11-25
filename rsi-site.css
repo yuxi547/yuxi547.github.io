@@ -27,8 +27,8 @@ body[data-page=rsi] main>article.product-copy{max-width:none;width:100%}
 .rsi-article h1{white-space:nowrap;text-wrap:nowrap;overflow-wrap:normal;font-size:clamp(24px,3vw,42px)}
 @media(max-width:900px){.rsi-article .hero .col{display:flex;flex-direction:column;align-items:stretch}.rsi-article .plane{order:3;max-width:680px;align-self:center}.rsi-article h1{font-size:clamp(19px,4.7vw,40px)}.rsi-article .hero{padding-top:40px}}
 
-body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(24px,3vw,42px)!important;white-space:nowrap;overflow-wrap:normal}
-@media(max-width:900px){body[data-page=rsi] .rsi-article .hero h1{font-size:clamp(17px,4.5vw,36px)!important}}
+body[data-page=rsi] .rsi-article .hero h1{font-size:var(--rsi-title)!important;white-space:nowrap;overflow-wrap:normal}
+@media(max-width:900px){body[data-page=rsi] .rsi-article .hero h1{font-size:var(--rsi-title)!important}}
 
 
 /* Preserve readable technical text across phone and tablet widths. */
@@ -58,4 +58,57 @@ html[lang=en] .rsi-article p{text-align:left;text-align-last:auto;hyphens:none}
  .rsi-article .hero .col{gap:24px}
  .rsi-article .hero .facts{margin-bottom:0}
  .rsi-article .rsi-toc{margin-top:24px}
+}
+
+/* Six reading roles shared by both languages. Diagram coordinates and replay are independent. */
+body[data-page=rsi] .rsi-article {
+ --rsi-title:40px; --rsi-section:30px; --rsi-subheading:22px;
+ --rsi-lead:18px; --rsi-body:16px; --rsi-meta:13px;
+ --rsi-leading:1.8;
+ font-size:var(--rsi-body); line-height:var(--rsi-leading);
+}
+html[lang=en] body[data-page=rsi] .rsi-article {--rsi-leading:1.65}
+body[data-page=rsi] .rsi-article .hero h1 {
+ font-size:var(--rsi-title)!important; line-height:1.3; white-space:normal;
+ text-wrap:balance; overflow-wrap:normal; word-break:normal; letter-spacing:0;
+ margin:16px 0 24px;
+}
+body[data-page=rsi] .rsi-article h2 {
+ font-size:var(--rsi-section); line-height:1.4; margin:16px 0 24px; text-wrap:balance;
+}
+body[data-page=rsi] .rsi-article :is(h3,.cards h4) {
+ font-family:var(--head); font-size:var(--rsi-subheading); font-weight:400;
+ line-height:1.45; letter-spacing:0; text-transform:none; text-wrap:balance;
+}
+body[data-page=rsi] .rsi-article h3 {margin-top:48px; margin-bottom:16px; padding-top:24px}
+body[data-page=rsi] .rsi-article :is(p,li,.aside,.cards p,.facts,.lb td) {
+ font-size:var(--rsi-body); line-height:var(--rsi-leading); letter-spacing:0;
+}
+body[data-page=rsi] .rsi-article p {margin-top:0; margin-bottom:1.25em}
+body[data-page=rsi] .rsi-article :is(.lede,.thesis,.steps .ask,.intro,.eq .motto,.eq .code .motto) {
+ font-family:var(--sans); font-size:var(--rsi-lead); font-style:normal;
+ line-height:var(--rsi-leading); letter-spacing:0;
+}
+body[data-page=rsi] .rsi-article :is(.rsi-toc a,.links a,.eyebrow,.facts dt,.lab,figcaption,.cap,.cards small,.cards em,.rounds span,.cats,.parts,.parts b,.parts i,.see,.lb th,.lb td span,.stats span,.board h4,blockquote small,.eq pre small,.eq .lines small,.eq dl,.eq dl.two dt) {
+ font-size:var(--rsi-meta); line-height:1.6; letter-spacing:0.02em;
+}
+body[data-page=rsi] .rsi-article :is(.stats b,.eq dl.nums dt,.lb td b) {
+ font-size:var(--rsi-section); line-height:1.3; letter-spacing:0;
+}
+body[data-page=rsi] .rsi-article :is(.rounds b,.cats b,.eq .lines,.eq .lines .op,.eq dt,.eq dl.nums) {
+ font-size:var(--rsi-body); line-height:1.6;
+}
+body[data-page=rsi] .rsi-article :is(pre,code,blockquote,.board p,.facts code,.eq pre) {
+ font-size:13px; line-height:1.7; letter-spacing:0;
+}
+body[data-page=rsi] .rsi-article pre {overflow-x:auto; white-space:pre}
+body[data-page=rsi] .rsi-article .eq pre span {min-width:max-content; flex-wrap:nowrap; gap:16px}
+body[data-page=rsi] .rsi-article :is(figcaption,.cap) {text-align:center; text-align-last:center; margin-top:12px}
+body[data-page=rsi] .rsi-article .lb td::before {font-size:var(--rsi-meta); line-height:1.6}
+@media(max-width:900px){
+ body[data-page=rsi] .rsi-article {--rsi-title:32px; --rsi-section:26px; --rsi-subheading:20px}
+}
+@media(max-width:600px){
+ body[data-page=rsi] .rsi-article {--rsi-title:26px; --rsi-section:22px; --rsi-subheading:18px; --rsi-lead:17px}
+ body[data-page=rsi] .rsi-article h3 {margin-top:36px; padding-top:20px}
 }
