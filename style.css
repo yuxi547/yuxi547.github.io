@@ -523,3 +523,22 @@ body[data-page=home] .box-stage h1{font-size:clamp(40px,4.7vw,72px)}
 
 /* Match the two desktop product names and their vertical rhythm. */
 @media(min-width:851px){.rsi-stage h2.stage-product-name{font-size:clamp(40px,4.7vw,72px)}}
+
+/* User-directed mixed-script headings and language-specific reading alignment. */
+html[lang="zh-CN"] .box-article-hero .box-tagline .brand-latin,
+html[lang="zh-CN"] .careers-hero h1 .brand-latin{font-family:Ding,Noto,sans-serif;font-weight:400;font-style:normal;letter-spacing:inherit}
+html[lang=en] .news-body p,html[lang=en] .news-about p,html[lang=en] .product-copy p,html[lang=en] .box-release-article p{text-align:left;text-align-last:auto;hyphens:none}
+.news-body p,.news-about p{font-family:Poppins,Noto,sans-serif;font-weight:400;font-style:normal;font-size:17px;line-height:2;letter-spacing:normal;word-spacing:normal;text-wrap:wrap}
+.news-about p{max-width:none;margin:0 0 28px;text-align:justify;text-align-last:start}
+html[lang=en] .news-story h2,html[lang=en] .news-article>h1{font-family:Poppins,Noto,sans-serif;font-weight:400;font-style:normal;letter-spacing:-.015em;line-height:1.4;text-wrap:pretty;word-break:normal;overflow-wrap:normal;hyphens:none}
+html[lang=en] .news-story h2{font-size:clamp(22px,1.8vw,28px)}
+html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
+@media(max-width:480px){
+ .news-body p,.news-about p{font-size:16px;line-height:1.95}
+ html[lang=en] .news-story h2{font-size:21px;line-height:1.4}
+ html[lang=en] .news-article>h1{font-size:24px;line-height:1.4}
+}
+/* Show the original landscape composition without zooming or cropping. */
+@media(min-width:851px){.rsi-landscape img{object-fit:contain;object-position:center;width:100%;height:100%;max-width:100%;margin:0}}
+
+.news-body .news-report-label{font-style:italic;font-synthesis:style}
