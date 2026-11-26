@@ -584,3 +584,6 @@ html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
 .job-picker-option:hover,.job-picker-option:focus-visible{background:var(--panel)}
 .job-picker-option[aria-selected=true]{color:var(--blue);background:var(--panel)}
 .job-picker-trigger:focus-visible,.job-picker-option:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* News artwork retains its original 3:2 proportions and blends into the white page. */
+.news-portrait img{aspect-ratio:3/2;object-fit:contain;height:auto;filter:contrast(1.08);border:0;box-shadow:none}
