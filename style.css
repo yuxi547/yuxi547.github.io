@@ -562,3 +562,7 @@ html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
  .box-release-article .stats .metric-battery-label{font-size:clamp(11px,3.2vw,13px)}
  .box-release-article .stats .metric-battery-phrase{display:block;white-space:nowrap}
 }
+
+/* Blend the illustration's pale paper texture into the page at every breakpoint. */
+.career-portrait,.career-portrait img{border:0;outline:0;box-shadow:none;background:transparent}
+.career-portrait img{filter:contrast(1.08);-webkit-mask-image:linear-gradient(to right,transparent,#000 1%,#000 99%,transparent),linear-gradient(to bottom,transparent,#000 1%,#000 99.5%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 1%,#000 99%,transparent),linear-gradient(to bottom,transparent,#000 1%,#000 99.5%,transparent);mask-composite:intersect}
