@@ -142,3 +142,13 @@ if(document.querySelector('.product-stages')){
  })},{threshold:[0,.18,.5,.75]});sections.forEach(section=>stagesObserver.observe(section));
  const footerObserver=new IntersectionObserver(entries=>document.body.classList.toggle('home-footer-visible',entries[0].isIntersecting),{threshold:.1});footerObserver.observe(document.querySelector('footer'));
 }
+// Make the near-white paper in editorial artwork transparent; retain the original pixels and proportions.
+if(document.querySelector('.career-portrait,.news-portrait')){
+ const inkDefs=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ inkDefs.setAttribute('class','editorial-ink-defs');
+ inkDefs.setAttribute('aria-hidden','true');
+ inkDefs.setAttribute('focusable','false');
+ inkDefs.innerHTML='<defs><filter id="editorial-ink" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.226 -.761 -.077 1.028 0"/></filter></defs>';
+ document.body.prepend(inkDefs);
+ document.body.classList.add('editorial-ink-ready');
+}
