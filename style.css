@@ -566,3 +566,21 @@ html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
 /* Blend the illustration's pale paper texture into the page at every breakpoint. */
 .career-portrait,.career-portrait img{border:0;outline:0;box-shadow:none;background:transparent}
 .career-portrait img{filter:contrast(1.08);-webkit-mask-image:linear-gradient(to right,transparent,#000 1%,#000 99%,transparent),linear-gradient(to bottom,transparent,#000 1%,#000 99.5%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 1%,#000 99%,transparent),linear-gradient(to bottom,transparent,#000 1%,#000 99.5%,transparent);mask-composite:intersect}
+
+/* Careers filters: one label baseline and one control height across languages. */
+.job-filters>div{min-width:0}
+.job-filters label{height:20px;line-height:20px;margin:0 0 8px}
+.job-filters input,.job-filters select,.job-filters .job-picker-trigger,.job-filters>button{box-sizing:border-box;height:48px;min-height:48px;margin:0;font-family:var(--body);font-size:16px;line-height:22px;padding:0 12px}
+.job-filters select[hidden]{display:none}
+.job-filters input{-webkit-appearance:none;appearance:none}
+.job-picker{position:relative;min-width:0}
+.job-filters .job-picker-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:var(--control);background:var(--bg);color:var(--text);cursor:pointer}
+.job-picker-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.job-picker-trigger:after{content:'';flex:none;width:6px;height:6px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);margin:-4px 4px 0 0}
+.job-picker-trigger[aria-expanded=true]:after{transform:rotate(225deg);margin-top:4px}
+.job-picker-list{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:35;padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;box-shadow:none}
+.job-picker-list[hidden]{display:none}
+.job-filters .job-picker-option{display:block;width:100%;min-height:44px;padding:10px 12px;border:0;border-radius:8px;background:transparent;color:inherit;font:14px/1.5 var(--body);text-align:left;cursor:pointer}
+.job-picker-option:hover,.job-picker-option:focus-visible{background:var(--panel)}
+.job-picker-option[aria-selected=true]{color:var(--blue);background:var(--panel)}
+.job-picker-trigger:focus-visible,.job-picker-option:focus-visible{outline:2px solid var(--blue);outline-offset:2px}

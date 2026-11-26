@@ -22,7 +22,30 @@ if(form){
  const query=document.querySelector('#job-query'),team=document.querySelector('#job-team'),type=document.querySelector('#job-type');
  const items=[...document.querySelectorAll('.job')];
  const params=new URLSearchParams(location.search);query.value=params.get('q')||'';team.value=params.get('team')||'';type.value=params.get('type')||'';
+ // Match the product menu while retaining native selects as a no-JavaScript fallback.
+ const pickers=[team,type].map(select=>{
+  const label=form.querySelector(`label[for="${select.id}"]`);
+  const wrap=document.createElement('div');wrap.className='job-picker';
+  const trigger=document.createElement('button');trigger.type='button';trigger.className='job-picker-trigger';trigger.id=select.id+'-trigger';
+  const value=document.createElement('span');value.id=select.id+'-value';trigger.append(value);
+  label.id=select.id+'-label';label.htmlFor=trigger.id;
+  trigger.setAttribute('aria-labelledby',label.id+' '+value.id);trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+  const list=document.createElement('div');list.className='job-picker-list';list.id=select.id+'-list';list.hidden=true;list.setAttribute('role','listbox');list.setAttribute('aria-labelledby',label.id);trigger.setAttribute('aria-controls',list.id);
+  const options=[...select.options].map(option=>{const b=document.createElement('button');b.type='button';b.className='job-picker-option';b.textContent=option.textContent;b.dataset.value=option.value;b.setAttribute('role','option');b.tabIndex=-1;list.append(b);return b});
+  function close(restore=false){list.hidden=true;trigger.setAttribute('aria-expanded','false');if(restore)trigger.focus()}
+  function sync(){value.textContent=select.selectedOptions[0]?.textContent||select.options[0].textContent;options.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.value===select.value)));close()}
+  function open(last=false){form.querySelectorAll('.job-picker-trigger[aria-expanded="true"]').forEach(b=>b.click());list.hidden=false;trigger.setAttribute('aria-expanded','true');(last?options.at(-1):options.find(b=>b.dataset.value===select.value)||options[0]).focus()}
+  trigger.addEventListener('click',()=>list.hidden?open():close());
+  trigger.addEventListener('keydown',e=>{if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();open(e.key==='ArrowUp')}});
+  options.forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.value;select.dispatchEvent(new Event('change',{bubbles:true}));sync();close(true)}));
+  list.addEventListener('keydown',e=>{let i=options.indexOf(document.activeElement);if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){e.preventDefault();i=e.key==='Home'?0:e.key==='End'?options.length-1:(i+(e.key==='ArrowDown'?1:-1)+options.length)%options.length;options[i].focus()}else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey){const found=options.find(b=>b.textContent.toLocaleLowerCase().startsWith(e.key.toLocaleLowerCase()));if(found){e.preventDefault();found.focus()}}});
+  wrap.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close(true)}});
+  wrap.addEventListener('focusout',e=>{if(!wrap.contains(e.relatedTarget))close()});
+  document.addEventListener('click',e=>{if(!wrap.contains(e.target))close()});
+  select.hidden=true;select.after(wrap);wrap.append(trigger,list);sync();return {sync};
+ });
  function filter(updateURL=true){
+  pickers.forEach(p=>p.sync());
   const words=query.value.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);let count=0;
   items.forEach(item=>{const match=(!team.value||item.dataset.team===team.value)&&(!type.value||item.dataset.type===type.value)&&words.every(w=>item.dataset.search.toLocaleLowerCase().includes(w));item.hidden=!match;if(match)count++});
   document.querySelector('#job-count').textContent=en?`${count} of ${items.length} roles`:`显示 ${count} / ${items.length} 个岗位`;
