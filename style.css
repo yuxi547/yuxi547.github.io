@@ -597,3 +597,6 @@ html[lang=en] .news-article>h1{font-size:clamp(26px,2.5vw,34px)}
 .job-filters{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .job-filters .job-picker-trigger,.job-filters>button[type=reset]{font:400 14px/22px var(--body);letter-spacing:normal}
 .job-filters .job-picker-trigger>span{font:inherit;letter-spacing:inherit}
+.job-section .job-duty-heading{font:500 16px/1.7 var(--body);color:var(--fg);margin:26px 0 12px}
+.job-section h3+.job-duty-heading{margin-top:0}
+.job-body .job-closing{font:400 16px/1.9 var(--body);color:var(--muted);margin:24px 0 0}
